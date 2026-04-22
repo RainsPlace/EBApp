@@ -121,7 +121,7 @@
   .abbr-tag { font-family:'Cinzel',serif; font-size:.7rem; color:var(--text-muted); margin-left:5px; }
 
   /* PLAYERS */
-  .players-section { padding:0 0 40px; }
+  .players-section { padding:0 0 40px; max-width:51vw; min-width:580px; margin:0 auto; }
   .player-controls { display:flex; align-items:center; gap:12px; padding:14px 18px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-wrap:wrap; }
   .etype-pills { display:flex; gap:8px; flex-wrap:wrap; }
   .etype-pill { font-family:'Cinzel',serif; font-size:.78rem; font-weight:700; letter-spacing:.1em; padding:6px 16px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; transition:all .2s; }
@@ -132,11 +132,11 @@
   .player-search { background:var(--bg-panel); color:var(--text-main); border:1px solid var(--border); border-radius:4px; padding:8px 14px; font-family:'Crimson Pro',serif; font-size:1rem; outline:none; min-width:170px; max-width:240px; }
   .player-search:focus{border-color:var(--gold-dim)} .player-search::placeholder{color:var(--text-muted)}
   .pcnt { font-size:.88rem; color:var(--text-dim); font-style:italic; white-space:nowrap; }
-  .player-tbl-wrap { overflow-x:auto; overflow-y:auto; max-height:72vh; border:1px solid var(--border-gold); border-radius:0 0 6px 6px; margin:0 16px; }
-  .player-tbl { width:100%; border-collapse:collapse; font-size:.84rem; }
+  .player-tbl-wrap { overflow-x:auto; overflow-y:auto; max-height:72vh; border:1px solid var(--border-gold); border-radius:0 0 6px 6px; margin:0; }
+  .player-tbl { width:100%; border-collapse:collapse; font-size:1.26rem; }
   .player-tbl thead { position:sticky; top:0; z-index:2; }
   .player-tbl thead tr { background:var(--bg-dark); }
-  .player-tbl th { font-family:'Cinzel',serif; font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--text-dim); text-transform:uppercase; padding:8px 10px; text-align:right; border-bottom:2px solid var(--border-gold); cursor:pointer; user-select:none; white-space:nowrap; transition:color .15s; }
+  .player-tbl th { font-family:'Cinzel',serif; font-size:.99rem; font-weight:700; letter-spacing:.08em; color:var(--text-dim); text-transform:uppercase; padding:10px 12px; text-align:right; border-bottom:2px solid var(--border-gold); cursor:pointer; user-select:none; white-space:nowrap; transition:color .15s; }
   .player-tbl th:hover{color:var(--gold)}.player-tbl th.sorted{color:var(--gold-light)}.player-tbl th.left{text-align:left}
   /* MTT column teal, CUTT column green when in ALL mode */
   .player-tbl th.col-mtt{color:var(--blue-light)}.player-tbl th.col-cutt{color:var(--green-light)}
@@ -147,9 +147,9 @@
   .player-tbl tbody tr.rk1{background:rgba(212,168,67,.08)!important;border-left:2px solid var(--gold)}
   .player-tbl tbody tr.rk2{background:rgba(168,184,200,.06)!important;border-left:2px solid #a8b8c8}
   .player-tbl tbody tr.rk3{background:rgba(196,122,69,.06)!important;border-left:2px solid #c47a45}
-  .player-tbl td { padding:4px 10px; vertical-align:middle; text-align:right; font-variant-numeric:tabular-nums; color:var(--text-dim); }
-  .player-tbl td.left{text-align:left}.player-tbl td.player-name{color:var(--text-main);font-size:.86rem;white-space:nowrap}
-  .team-badge { display:inline-block; font-family:'Cinzel',serif; font-size:.58rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-left:4px; letter-spacing:.05em; opacity:.9; }
+  .player-tbl td { padding:7px 12px; vertical-align:middle; text-align:right; font-variant-numeric:tabular-nums; color:var(--text-dim); }
+  .player-tbl td.left{text-align:left}.player-tbl td.player-name{color:var(--text-main);font-size:1.29rem;white-space:nowrap}
+  .team-badge { display:inline-block; font-family:'Cinzel',serif; font-size:.87rem; font-weight:700; padding:2px 6px; border-radius:3px; margin-left:5px; letter-spacing:.05em; opacity:.9; }
   .player-tbl td.pts-total{font-weight:700;color:var(--text-main)}
   .rk1 td.pts-total{color:var(--gold-light)!important}.rk2 td.pts-total{color:#a8b8c8!important}.rk3 td.pts-total{color:#c47a45!important}
   /* Hide MTT/CUTT cols when filtering to single event type */
@@ -177,6 +177,174 @@
   .fr { color:var(--gold-dim); letter-spacing:.3em; display:block; margin-bottom:4px; }
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
+  /* THEME + SCREENSHOT BUTTONS */
+  .hdr-theme { display:inline-flex; align-items:center; gap:5px; margin-top:10px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:20px; padding:5px 14px; font-family:'Cinzel',serif; font-size:.72rem; font-weight:700; letter-spacing:.12em; cursor:pointer; transition:all .2s; }
+  .hdr-theme:hover { color:var(--gold); border-color:var(--gold-dim); }
+  .hdr-screenshot { display:inline-flex; align-items:center; gap:5px; margin-top:10px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:20px; padding:5px 14px; font-family:'Cinzel',serif; font-size:.72rem; font-weight:700; letter-spacing:.12em; cursor:pointer; transition:all .2s; }
+  .hdr-screenshot:hover { color:var(--green-light); border-color:var(--green-dim); }
+
+  /* CALENDAR */
+  .cal-filter-bar { display:flex; align-items:center; gap:8px; padding:12px 18px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .cal-filter-label { font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.18em; color:var(--text-muted); margin-right:4px; flex-shrink:0; }
+  .cal-pill { font-family:'Cinzel',serif; font-size:.72rem; font-weight:700; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; transition:all .2s; white-space:nowrap; }
+  .cal-pill:hover { border-color:var(--gold-dim); color:var(--gold-dim); }
+  .cal-pill.active { background:rgba(212,168,67,.12); border-color:var(--gold); color:var(--gold-light); }
+  .cal-pill.pill-run.active  { background:rgba(86,176,80,.15); border-color:var(--green); color:var(--green-light); }
+  .cal-pill.pill-reg.active  { background:rgba(74,144,217,.15); border-color:var(--blue);  color:var(--blue-light); }
+  .cal-pill.pill-ann.active  { background:rgba(240,192,48,.12); border-color:var(--yellow);color:var(--yellow); }
+  .cal-pill.pill-fin.active  { background:rgba(100,100,100,.12);border-color:#666;color:#aaa; }
+  .cal-result-count { font-size:.75rem; color:var(--text-muted); font-style:italic; white-space:nowrap; margin-left:auto; }
+  .cal-section { padding:16px 16px 40px; }
+  .cal-date-group { margin-bottom:20px; max-width:33vw; min-width:260px; }
+  .cal-date-hdr { font-family:'Cinzel',serif; font-size:.82rem; font-weight:700; letter-spacing:.14em; color:var(--gold-light); padding:8px 14px; background:var(--bg-panel); border:1px solid var(--border-gold); border-radius:4px 4px 0 0; text-transform:uppercase; }
+  .cal-date-hdr.today { background:rgba(86,176,80,.12); color:var(--green-light); border-color:var(--green-dim); }
+  .cal-card { display:grid; grid-template-columns:1fr auto; gap:8px 16px; align-items:center; padding:10px 14px; border:1px solid var(--border); border-top:none; background:var(--bg-card); transition:background .15s; }
+  .cal-card:last-child { border-radius:0 0 4px 4px; }
+  .cal-card:hover { background:rgba(212,168,67,.04); }
+  .cal-name { font-weight:600; font-size:.9rem; color:var(--text-main); }
+  .cal-meta { font-size:.78rem; color:var(--text-dim); margin-top:2px; }
+  .cal-time { font-family:'Cinzel',serif; font-size:.78rem; color:var(--gold); text-align:right; white-space:nowrap; }
+  .cal-status { display:inline-block; font-family:'Cinzel',serif; font-size:.62rem; font-weight:700; letter-spacing:.1em; padding:2px 8px; border-radius:10px; margin-top:4px; text-align:right; }
+  .cal-status.running     { background:rgba(86,176,80,.2);  color:var(--green-light); border:1px solid var(--green-dim); }
+  .cal-status.registering { background:rgba(74,144,217,.2); color:var(--blue-light);  border:1px solid var(--blue-dim); }
+  .cal-status.announced   { background:rgba(240,192,48,.15);color:var(--yellow);       border:1px solid var(--yellow-dim); }
+  .cal-status.finished    { background:rgba(80,80,80,.15);  color:#888;                border:1px solid #444; }
+  .cal-link { font-family:'Cinzel',serif; font-size:.72rem; color:var(--gold-light); text-decoration:underline; letter-spacing:.06em; }
+  .cal-link:hover { color:var(--gold); }
+  .cal-empty { text-align:center; padding:40px 16px; color:var(--text-muted); font-style:italic; }
+
+  /* MEMBERS */
+  .members-section { padding:24px 20px 48px; }
+  .members-grid { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
+  .team-card { display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border-gold); border-radius:8px; overflow:hidden; width:220px; flex-shrink:0; }
+  .team-card-avatar { width:130px; height:130px; border-radius:50%; object-fit:cover; display:block; margin:18px auto 4px; border:3px solid var(--border-gold); box-shadow:0 0 18px rgba(212,168,67,.25); }
+  .team-card-name { font-family:'Cinzel',serif; font-size:.95rem; font-weight:900; letter-spacing:.2em; text-transform:uppercase; padding:10px 16px 9px; text-align:center; width:100%; }
+  .team-card-divider { width:100%; height:3px; display:block; }
+  .team-member-list { width:100%; display:flex; flex-direction:column; padding:4px 0 10px; }
+  .team-member-link { display:block; text-align:center; padding:4px 14px; font-size:.93rem; color:var(--text-main); text-decoration:none; transition:background .1s,color .15s; }
+  .team-member-link:hover { background:rgba(212,168,67,.07); color:var(--gold-light); }
+
+  /* PLAYER TEAM ICON */
+  .player-team-icon { width:1em; height:1em; border-radius:50%; vertical-align:middle; margin-right:5px; object-fit:cover; flex-shrink:0; }
+
+  /* ══════════════════════════════════════════════════════
+     LIGHT THEME (body.light)
+  ══════════════════════════════════════════════════════ */
+  body.light {
+    --gold:        #7A5500;
+    --gold-light:  #5C3F00;
+    --gold-dim:    #9A6A10;
+    --green:       #1B6B18;
+    --green-light: #0F4D0D;
+    --green-dim:   #2E8B2E;
+    --blue:        #1A4D8C;
+    --blue-light:  #1A3A6A;
+    --yellow:      #7A6000;
+    --yellow-dim:  #9A7A10;
+    --teal:        #0A5E50;
+    --red:         #8B1A1A;
+    --bg-dark:     #F5F8F2;
+    --bg-card:     #FFFFFF;
+    --bg-panel:    #ECF2E8;
+    --bg-row:      #F5F8F2;
+    --bg-row-alt:  #EBF0E6;
+    --text-main:   #0D2B0D;
+    --text-dim:    #2E5E2E;
+    --text-muted:  #4A7A4A;
+    --border:      #C0D4B4;
+    --border-gold: #BF9A30;
+    --accent-mtt:  #1A4D8C;
+    --accent-cutt: #1B6B18;
+    --accent-all:  #7A6000;
+  }
+  body.light header { background:linear-gradient(180deg,#DFF0D0 0%,#F5F8F2 100%); border-bottom-color:#BF9A30; }
+  body.light header h1 { text-shadow:0 1px 3px rgba(0,0,0,.1); }
+  body.light .dawn-bar { background:linear-gradient(90deg,transparent,#2E8B2E,#BF9A30,#C8A020,#BF9A30,#2E8B2E,transparent); }
+  body.light .live-badge { background:rgba(122,85,0,.07); border-color:#BF9A30; }
+  body.light .hdr-refresh:hover, body.light .hdr-theme:hover { background:rgba(122,85,0,.06); }
+  body.light .hdr-screenshot:hover { background:rgba(27,107,24,.06); }
+  body.light #loadingScreen { background:#F5F8F2; }
+  body.light #errorScreen   { background:#F5F8F2; }
+  body.light .error-code    { background:#ECF2E8; border-color:#C0D4B4; }
+  body.light .tab-nav { background:#F5F8F2; border-bottom-color:#BF9A30; }
+  body.light .tab-btn.active { color:#5C3F00; border-bottom-color:#7A5500; background:rgba(122,85,0,.07); }
+  body.light .controls { background:#FFFFFF; border-bottom-color:#C0D4B4; }
+  body.light select { background-color:#ECF2E8; color:#0D2B0D; border-color:#BF9A30; }
+  body.light .period-bar { background:#FFFFFF; border-bottom-color:#C0D4B4; }
+  body.light .period-btn.active { background:rgba(122,85,0,.10); border-color:#7A5500; }
+  body.light .panels-row { border-color:#BF9A30; box-shadow:0 4px 24px rgba(0,0,0,.07); }
+  body.light .panel { background:#FFFFFF; border-right-color:#C0D4B4; }
+  body.light .panel-header { background:#ECF2E8; border-bottom-color:#BF9A30; }
+  body.light .panel-podium { background:linear-gradient(180deg,#DFF0D0 0%,#FFFFFF 100%); border-bottom-color:#C0D4B4; }
+  body.light table { color:#0D2B0D; }
+  body.light thead tr { background:#ECF2E8; }
+  body.light tbody tr { border-bottom-color:#C0D4B4; }
+  body.light tbody tr:nth-child(even) { background:#EBF0E6; }
+  body.light tbody tr:nth-child(odd)  { background:#F5F8F2; }
+  body.light tbody tr:hover { background:rgba(122,85,0,.05); }
+  body.light .player-search { background:#ECF2E8; border-color:#C0D4B4; color:#0D2B0D; }
+  body.light .player-tbl-wrap { border-color:#BF9A30; }
+  body.light .stat-card { background:#FFFFFF; border-color:#BF9A30; }
+  body.light .sc-head { background:#ECF2E8; border-bottom-color:#BF9A30; }
+  body.light .sc-row:hover { background:rgba(122,85,0,.04); }
+  body.light .cal-filter-bar { background:#FFFFFF; border-bottom-color:#C0D4B4; }
+  body.light .cal-date-hdr { background:#ECF2E8; border-color:#BF9A30; color:#5C3F00; }
+  body.light .cal-card { background:#FFFFFF; border-color:#C0D4B4; }
+  body.light .cal-card:hover { background:rgba(122,85,0,.04); }
+  body.light footer { border-top-color:#C0D4B4; }
+  body.light .team-card { background:#FFFFFF; border-color:#BF9A30; }
+  body.light .team-member-link { color:#0D2B0D; }
+  body.light .team-member-link:hover { background:rgba(122,85,0,.06); color:#5C3F00; }
+
+  /* ── Latest Game tab ── */
+  body.light .lg-event-banner { background:linear-gradient(180deg,#DFF0D0,#F5F8F2); border-bottom-color:#2E8B2E; }
+  body.light .lg-event-title  { text-shadow:none; }
+  body.light .lg-pod-row { background:linear-gradient(180deg,#DFF0D0,#F5F8F2); border-bottom-color:#2E8B2E; }
+  body.light .lg-card         { border-color:#2E8B2E; }
+  body.light .lg-card-gold    { border-color:#BF9A30; }
+  body.light .lg-card-bright  { border-color:#1B6B18; }
+  body.light .lg-card-dim     { border-color:#C0D4B4; }
+  body.light .lg-card-blue    { border-color:#4A7AB0; }
+  body.light .lg-ch-green     { background:linear-gradient(135deg,#DFF0D0,#C8E0C0); border-bottom-color:#2E8B2E; }
+  body.light .lg-ch-gold      { background:linear-gradient(135deg,#F5ECD0,#EAD8A0); border-bottom-color:#BF9A30; }
+  body.light .lg-ch-bright    { background:linear-gradient(135deg,#D0EAC8,#B8DCA8); border-bottom-color:#1B6B18; }
+  body.light .lg-ch-dim       { background:#ECF2E8;                                 border-bottom-color:#C0D4B4; }
+  body.light .lg-ch-blue      { background:linear-gradient(135deg,#D0DCF0,#B8C8E8); border-bottom-color:#4A7AB0; }
+  body.light .lg-ch-green  .lg-ch-title { color:#0F4D0D; }
+  body.light .lg-ch-gold   .lg-ch-title { color:#5C3F00; }
+  body.light .lg-ch-bright .lg-ch-title { color:#0D3B0D; }
+  body.light .lg-ch-dim    .lg-ch-title { color:#2E5E2E; }
+  body.light .lg-ch-blue   .lg-ch-title { color:#1A3A6A; }
+  body.light .lg-tbl thead tr { background:#ECF2E8; }
+  body.light .lg-tbl th       { color:#2E5E2E; border-bottom-color:#2E8B2E; }
+  body.light .lg-tbl tbody tr { border-bottom-color:#C0D4B4; }
+  body.light .lg-tbl tbody tr:nth-child(odd)  { background:#F5F8F2; }
+  body.light .lg-tbl tbody tr:nth-child(even) { background:#FFFFFF; }
+  body.light .lg-tbl tbody tr:hover           { background:rgba(27,107,24,.07)!important; }
+  body.light .lg-tbl td     { color:#0D2B0D; }
+  body.light .lg-tbl td.val { color:#1B6B18; }
+  body.light .lg-kv         { border-bottom-color:#C0D4B4; }
+  body.light .lg-kv:nth-child(odd)  { background:#F5F8F2; }
+  body.light .lg-kv:nth-child(even) { background:#FFFFFF; }
+  body.light .lg-kv-key { color:#4A7A4A; }
+  body.light .lg-kv-val { color:#5C3F00; }
+
+  /* ── Results / Output tab ── */
+  body.light .out-header-wrap { background:linear-gradient(135deg,#D0EEF5,#C0E0EC); border-bottom-color:#0A5E50; }
+  body.light .out-main-title  { color:#0A5E50; text-shadow:none; }
+  body.light .out-bar         { background:linear-gradient(90deg,transparent,#0A5E50,#26C6A6,#0A5E50,transparent); }
+  body.light .out-sec-hdr     { background:linear-gradient(135deg,#D0EEF5,#C0E0EC); color:#0A5E50; border-top-color:#0A5E50; }
+  body.light .out-sec-sub     { background:linear-gradient(135deg,#D0EEF5,#C0E0EC); }
+  body.light .out-row         { border-bottom-color:#C0D4B4; }
+  body.light .out-row:nth-child(odd)  { background:#F5F8F2; }
+  body.light .out-row:nth-child(even) { background:#FFFFFF; }
+  body.light .out-row:hover           { background:rgba(10,94,80,.06)!important; }
+  body.light .out-name  { color:#0D2B0D; }
+  body.light .out-pts   { color:#0A5E50; }
+  body.light .out-announce { color:#1B6B18; }
+  body.light .out-announce:nth-child(odd)  { background:#F5F8F2; }
+  body.light .out-announce:nth-child(even) { background:#FFFFFF; }
+
   /* ══════════════════════════════════════════════
      LATEST GAME + OUTPUT TAB SHARED STYLES
   ══════════════════════════════════════════════ */
@@ -187,32 +355,28 @@
   .lg-event-title { font-family:'Cinzel',serif; font-size:clamp(1rem,3.5vw,1.8rem); font-weight:900; color:var(--green-light); letter-spacing:.14em; text-shadow:0 0 30px rgba(86,176,80,.45); }
 
   /* Trophy row — 3 cards sourced from Team Total Points Today */
-  .lg-trophy-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:18px 20px 14px; background:var(--bg-card); border-bottom:2px solid var(--green-dim); max-width:680px; margin:0 auto; }
-  .lg-trophy-card { border-radius:10px; padding:18px 12px 14px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:5px; border:2px solid var(--green-dim); background:var(--bg-panel); }
-  .lg-trophy-card.t1 { border-color:var(--gold); background:linear-gradient(160deg,rgba(212,168,67,.13),rgba(212,168,67,.03)); box-shadow:0 0 28px rgba(212,168,67,.2); }
-  .lg-trophy-card.t2 { border-color:#8090a0; background:rgba(168,184,200,.05); }
-  .lg-trophy-card.t3 { border-color:#906040; background:rgba(196,122,69,.05); }
-  .lg-trophy-medal { font-size:2.2rem; line-height:1; }
-  .lg-trophy-name { font-family:'Cinzel',serif; font-size:1rem; font-weight:700; letter-spacing:.04em; line-height:1.3; }
-  .lg-trophy-card.t1 .lg-trophy-name { color:var(--gold-light); }
-  .lg-trophy-card.t2 .lg-trophy-name { color:#c0d0e0; }
-  .lg-trophy-card.t3 .lg-trophy-name { color:#d09060; }
-  .lg-trophy-pts { font-size:2.2rem; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; }
-  .lg-trophy-card.t1 .lg-trophy-pts { color:var(--gold-light); }
-  .lg-trophy-card.t2 .lg-trophy-pts { color:#c0d0e0; }
-  .lg-trophy-card.t3 .lg-trophy-pts { color:#d09060; }
-  .lg-trophy-label { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.16em; color:var(--text-muted); text-transform:uppercase; margin-top:2px; }
+  /* 5-team podium */
+  /* Centered 2/3-width wrapper for both podium and layout */
+  .lg-center-wrap { max-width:68vw; min-width:660px; margin:0 auto; }
+
+  .lg-pod-row { display:flex; align-items:flex-end; justify-content:center; gap:16px; padding:28px 32px 0; background:linear-gradient(180deg,#010801,var(--bg-dark)); border-bottom:2px solid var(--green-dim); flex-wrap:wrap; }
+  .lg-pod-slot { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:110px; max-width:150px; }
+  .lg-pod-avatar { width:82px; height:82px; border-radius:50%; object-fit:cover; display:block; }
+  .lg-pod-name { font-family:'Cinzel',serif; font-size:.75rem; font-weight:700; letter-spacing:.05em; text-align:center; line-height:1.3; max-width:140px; word-break:break-word; margin-top:3px; }
+  .lg-pod-pts { font-size:1.45rem; font-weight:700; font-variant-numeric:tabular-nums; }
+  .lg-pod-block { width:100%; display:flex; align-items:center; justify-content:center; border-radius:3px 3px 0 0; font-size:.82rem; font-family:'Cinzel',serif; font-weight:700; }
 
   /* Layout wrapper */
-  .lg-layout { padding:14px 14px 40px; display:flex; flex-direction:column; gap:12px; }
+  .lg-layout { padding:14px 14px 40px; }
 
-  /* Large blocks row: [Cutthroat stacked over Attendance] | MTT | Combined */
-  .lg-row-large { display:grid; grid-template-columns:1fr 1.5fr 2fr; gap:12px; align-items:start; }
-  /* Left column: Cutthroat stacked on top of Attendance */
-  .lg-col-left { display:flex; flex-direction:column; gap:12px; min-width:0; }
-
-  /* Small blocks row: 5 equal columns */
-  .lg-row-small { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:start; }
+  /* Two-column main grid: left=small cards (2 cols), right=MTT+Combined stacked */
+  .lg-main-grid   { display:grid; grid-template-columns:1fr 1.02fr; gap:12px; align-items:start; }
+  .lg-left-panel  { display:flex; flex-direction:column; gap:0; min-width:0; }
+  .lg-left-2col   { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start; }
+  .lg-col-left    { display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .lg-right-stack { display:flex; flex-direction:column; gap:12px; }
+  /* Congrats card spans full left panel = effectively 150% of one column */
+  .lg-left-panel > div:last-child .lg-card { width:100%; }
 
   /* Card shell */
   .lg-card { border:2px solid var(--green-dim); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; min-width:0; }
@@ -269,45 +433,51 @@
 
   /* RESPONSIVE */
   @media(max-width:1100px) {
-    .lg-row-large { grid-template-columns:1fr 1fr; }
-    .lg-row-small { grid-template-columns:repeat(3,1fr); }
+    .lg-center-wrap { max-width:92vw; min-width:0; }
+    .lg-main-grid { grid-template-columns:1fr; }
+    .lg-right-stack { flex-direction:row; flex-wrap:wrap; }
+    .lg-right-stack > * { flex:1; min-width:280px; }
   }
   @media(max-width:700px) {
     .panels-row { grid-template-columns:1fr; margin:10px 8px 30px; }
     .panel { border-right:none; border-bottom:1px solid var(--border); }
     .panel:last-child{border-bottom:none}
-    .lg-row-large { grid-template-columns:1fr; }
-    .lg-row-small { grid-template-columns:1fr 1fr; }
-    .lg-trophy-row { grid-template-columns:1fr 1fr; }
+    .lg-center-wrap { max-width:100vw; min-width:0; }
+    .lg-main-grid { grid-template-columns:1fr; }
+    .lg-left-2col { grid-template-columns:1fr; }
+    .lg-right-stack { flex-direction:column; }
+    .lg-pod-slot { min-width:64px; max-width:90px; }
+    .lg-pod-avatar { width:52px; height:52px; }
   }
 
   /* ══ OUTPUT / RESULTS — vertical stack ══ */
   .out-scroll { padding:20px 0 48px; display:flex; flex-direction:column; align-items:center; gap:0; }
   /* Centered narrow column */
-  .out-col { width:100%; max-width:480px; display:flex; flex-direction:column; }
+  .out-col { width:100%; max-width:33vw; min-width:480px; display:flex; flex-direction:column; }
   /* Section header (col B only row) */
-  .out-sec-hdr { font-family:'Cinzel',serif; font-size:.82rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; text-align:center; padding:14px 16px 6px; color:var(--teal); border-top:1px solid var(--teal-dim); margin-top:6px; background:linear-gradient(135deg,#020c10,#041824); }
+  .out-sec-hdr { font-family:'Cinzel',serif; font-size:1.44rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; text-align:center; padding:16px 18px 8px; color:var(--teal); border-top:1px solid var(--teal-dim); margin-top:6px; background:linear-gradient(135deg,#020c10,#041824); }
   .out-sec-hdr:first-child { margin-top:0; border-top:none; }
   /* Sub-header (italic label like "(Includes MTT & CutThroat)") */
-  .out-sec-sub { font-size:.75rem; color:var(--text-muted); text-align:center; padding:0 16px 6px; font-style:italic; background:linear-gradient(135deg,#020c10,#041824); }
+  .out-sec-sub { font-size:1.31rem; color:var(--text-muted); text-align:center; padding:0 16px 8px; font-style:italic; background:linear-gradient(135deg,#020c10,#041824); }
   /* Data row: place | name | points */
-  .out-row { display:flex; align-items:center; padding:5px 14px; border-bottom:1px solid #0a140a; gap:0; }
+  .out-row { display:flex; align-items:center; padding:8px 16px; border-bottom:1px solid #0a140a; gap:0; }
   .out-row:nth-child(odd){background:#070d07} .out-row:nth-child(even){background:#090f09}
   .out-row:hover{background:rgba(38,198,166,.06)!important}
   .out-row.rg{background:rgba(212,168,67,.11)!important;border-left:2px solid var(--gold)}
   .out-row.rs{background:rgba(168,184,200,.07)!important;border-left:2px solid #708090}
   .out-row.rb{background:rgba(196,122,69,.07)!important;border-left:2px solid #907050}
-  .out-place { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; color:var(--text-muted); width:36px; flex-shrink:0; }
+  .out-place { font-family:'Cinzel',serif; font-size:1.22rem; font-weight:700; color:var(--text-muted); width:52px; flex-shrink:0; }
   .out-row.rg .out-place{color:var(--gold)} .out-row.rs .out-place{color:#a8b8c8} .out-row.rb .out-place{color:#c47a45}
-  .out-name  { flex:1; font-size:.88rem; color:var(--text-main); }
+  .out-name  { flex:1; font-size:1.54rem; color:var(--text-main); }
   .out-row.rg .out-name{color:var(--gold-light);font-weight:600} .out-row.rs .out-name{color:#c0d0e0} .out-row.rb .out-name{color:#d09060}
-  .out-pts   { font-size:.88rem; font-weight:600; color:var(--teal); font-variant-numeric:tabular-nums; min-width:44px; text-align:right; }
+  .out-pts   { font-size:1.54rem; font-weight:600; color:var(--teal); font-variant-numeric:tabular-nums; min-width:60px; text-align:right; }
   .out-row.rg .out-pts{color:var(--gold-light)} .out-row.rs .out-pts{color:#b0c8d8} .out-row.rb .out-pts{color:#c89060}
   /* Congrats / announcement rows (col B full-width sentence) */
-  .out-announce { padding:8px 16px; font-family:'Cinzel',serif; font-size:.78rem; color:var(--green-light); text-align:center; letter-spacing:.03em; border-bottom:1px solid #0a140a; }
+  .out-announce { padding:10px 16px; font-family:'Cinzel',serif; font-size:1.37rem; color:var(--green-light); text-align:center; letter-spacing:.03em; border-bottom:1px solid #0a140a; }
   .out-announce:nth-child(odd){background:#070d07} .out-announce:nth-child(even){background:#090f09}
 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -335,16 +505,20 @@
   <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:4px">
     <div class="live-badge"><span class="live-dot"></span> LIVE DATA</div>
     <button class="hdr-refresh" id="hdrRefreshBtn" onclick="loadData(true)"><span class="rih">&#8635;</span> REFRESH</button>
+    <button class="hdr-screenshot" onclick="captureTab()">&#128247; COPY TAB</button>
+    <button class="hdr-theme" id="themeBtn" onclick="toggleTheme()">&#9788; LIGHT</button>
   </div>
   <div class="updated-time" id="updatedTime"></div>
 </header>
 
 <div class="tab-nav">
   <button class="tab-btn active" id="tab-standings" onclick="switchTab('standings')">&#127942; TEAM STANDINGS</button>
-  <button class="tab-btn"        id="tab-players"   onclick="switchTab('players')">&#9824; PLAYERS</button>
+  <button class="tab-btn"        id="tab-players"   onclick="switchTab('players')">&#9824; PLAYERS INDIVIDUAL</button>
   <button class="tab-btn"        id="tab-leaders"   onclick="switchTab('leaders')">&#9733; LEADERS</button>
   <button class="tab-btn"        id="tab-latest"    onclick="switchTab('latest')">&#9728; LATEST GAME</button>
   <button class="tab-btn"        id="tab-output"    onclick="switchTab('output')">&#9741; RESULTS</button>
+  <button class="tab-btn"        id="tab-calendar"  onclick="switchTab('calendar')">&#128197; CALENDAR</button>
+  <button class="tab-btn"        id="tab-members"   onclick="switchTab('members')">&#128101; MEMBERS</button>
 </div>
 
 <div id="ctrl-main" class="controls">
@@ -428,9 +602,25 @@
     <div class="lg-event-banner" id="lg-banner">
       <div class="lg-event-title">LATEST GAME RESULTS</div>
     </div>
-    <div class="lg-trophy-row" id="lg-trophy"></div>
-    <div class="lg-layout" id="lg-layout"></div>
+    <div class="lg-center-wrap">
+      <div class="lg-pod-row" id="lg-trophy"></div>
+      <div class="lg-layout" id="lg-layout"></div>
+    </div>
   </div>
+</div>
+
+<!-- CALENDAR -->
+<div id="section-calendar" style="display:none">
+  <div class="cal-filter-bar">
+    <span class="cal-filter-label">FILTER &#9658;</span>
+    <button class="cal-pill"               id="cpill-all"          onclick="setCalFilter('all')">ALL</button>
+    <button class="cal-pill pill-run"      id="cpill-running"      onclick="setCalFilter('running')">RUNNING</button>
+    <button class="cal-pill pill-reg active" id="cpill-registering" onclick="setCalFilter('registering')">REGISTERING</button>
+    <button class="cal-pill pill-ann"      id="cpill-announced"    onclick="setCalFilter('announced')">ANNOUNCED</button>
+    <button class="cal-pill pill-fin"      id="cpill-finished"     onclick="setCalFilter('finished')">FINISHED</button>
+    <span class="cal-result-count" id="calCount"></span>
+  </div>
+  <div class="cal-section" id="calSection"></div>
 </div>
 
 <!-- OUTPUT / RESULTS -->
@@ -441,6 +631,13 @@
       <div class="out-main-title" id="out-title">RESULTS</div>
     </div>
     <div class="out-scroll" id="out-scroll"></div>
+  </div>
+</div>
+
+<!-- MEMBERS -->
+<div id="section-members" style="display:none">
+  <div class="members-section">
+    <div class="members-grid" id="membersGrid"></div>
   </div>
 </div>
 
@@ -456,8 +653,27 @@ var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyFPUX9EYA6LQokYFudgpZ
 // ══════════════════════════════════════════════════════
 
 var DATA={}; var STATS={}; var TEAMS={}; var QUARTERS=[];
-var LATEST_GAME=null; var OUTPUT_DATA=null;
+var LATEST_GAME=null; var OUTPUT_DATA=null; var TOURNAMENTS=[]; var MEMBERS={};
 var activeTab='standings'; var activePeriod='Overall'; var activeEtype='total';
+var calFilter='registering';
+
+var TEAM_META = {
+  'KingzRatz':          { color:'#9060d0', abbr:'KzRz', avatar:'https://raw.githubusercontent.com/RainsPlace/Avatars/main/Early%20Bird/KingzRatz.png' },
+  'NAKED -PF-':         { color:'#26c6a6', abbr:'NPF',  avatar:'https://raw.githubusercontent.com/RainsPlace/Avatars/main/Early%20Bird/NAKED%20-PF-.png' },
+  "Phil's Pot Chasers": { color:'#d8d030', abbr:'PPC',  avatar:'https://raw.githubusercontent.com/RainsPlace/Avatars/main/Early%20Bird/Phil\'s%20Pot%20Chasers.png' },
+  'QUEENzHEARTz':       { color:'#f0c030', abbr:'QzHz', avatar:'https://raw.githubusercontent.com/RainsPlace/Avatars/main/Early%20Bird/QUEENzHEARTz.png' },
+  'One Hit Wonders':    { color:'#40c060', abbr:'OHW',  avatar:'https://raw.githubusercontent.com/RainsPlace/Avatars/main/Early%20Bird/One%20Hit%20Wonders.jpeg' },
+  'New Recruits':       { color:'#c44a8a', abbr:'NEW',  avatar:'https://raw.githubusercontent.com/RainsPlace/Avatars/main/Early%20Bird/EB1.jpg' }
+};
+function teamAvatar(name, size) {
+  var meta = TEAM_META[name]; if (!meta || !meta.avatar) return '';
+  var sz = size || '70px';
+  return '<img src="'+esc(meta.avatar)+'" style="width:'+sz+';height:'+sz+';border-radius:50%;object-fit:cover;" alt="'+esc(name)+'" onerror="this.style.display=\'none\'">';
+}
+function playerIcon(teamName) {
+  var meta = TEAM_META[teamName]; if (!meta || !meta.avatar) return '';
+  return '<img class="player-team-icon" src="'+esc(meta.avatar)+'" alt="'+esc(teamName)+'" onerror="this.style.display=\'none\'">';
+}
 var pSortCol='rank'; var pSortAsc=true; var pSearch='';
 
 function n(v)    { return (!v&&v!==0)?'\u2014':Number(v).toLocaleString(); }
@@ -482,6 +698,7 @@ function loadData(isRefresh){
       if(json.error)throw new Error(json.error);
       DATA=json.data||{}; STATS=json.stats||{}; TEAMS=json.teams||{};
       QUARTERS=json.quarters||[]; LATEST_GAME=json.latestGame||null; OUTPUT_DATA=json.output||null;
+      TOURNAMENTS=json.tournaments||[]; MEMBERS=json.members||{};
       var sel=document.getElementById('quarterSelect'); var prev=sel.value;
       sel.innerHTML='';
       QUARTERS.forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
@@ -509,7 +726,7 @@ function showError(msg){
 
 function switchTab(tab){
   activeTab=tab;
-  ['standings','players','leaders','latest','output'].forEach(function(t){
+  ['standings','players','leaders','latest','output','calendar','members'].forEach(function(t){
     document.getElementById('tab-'+t).classList.toggle('active',t===tab);
     document.getElementById('section-'+t).style.display=t===tab?'':'none';
   });
@@ -520,6 +737,8 @@ function switchTab(tab){
   if(tab==='leaders')renderLeaders();
   if(tab==='latest')renderLatestGame();
   if(tab==='output')renderOutputTab();
+  if(tab==='calendar')renderCalTab();
+  if(tab==='members')renderMembers();
 }
 
 function buildPeriodBar(){
@@ -551,9 +770,10 @@ function renderStandings(){
     });return;
   }
   var td=DATA[q].teams||{};
-  renderTeamPanel('mtt',td.MTT||[],false);
-  renderTeamPanel('cutt',td.CUTT||[],false);
-  renderTeamPanel('all',td.COMBINED||[],true);
+  var filterNR=function(arr){return (arr||[]).filter(function(t){return t.team!=='New Recruits';});};
+  renderTeamPanel('mtt', filterNR(td.MTT),    false);
+  renderTeamPanel('cutt',filterNR(td.CUTT),   false);
+  renderTeamPanel('all', filterNR(td.COMBINED),true);
 }
 function renderTeamPanel(panelId,teams,isCombined){
   buildTeamPodium('pod-'+panelId,teams);
@@ -569,12 +789,26 @@ function renderTeamPanel(panelId,teams,isCombined){
 function buildTeamPodium(elId,teams){
   var el=document.getElementById(elId);
   if(!teams||!teams.length){el.innerHTML='<div class="empty-msg">No data</div>';return;}
-  var top=[teams[0]||null,teams[1]||null,teams[2]||null];
-  var medals=[{border:'var(--gold)',bg:'rgba(212,168,67,.18)',txt:'var(--gold)',blk:'linear-gradient(135deg,#3e2e08,#6a5010)',h:'44px'},{border:'#a8b8c8',bg:'rgba(168,184,200,.12)',txt:'#a8b8c8',blk:'linear-gradient(135deg,#20282e,#303840)',h:'30px'},{border:'#c47a45',bg:'rgba(196,122,69,.12)',txt:'#c47a45',blk:'linear-gradient(135deg,#2c1e10,#442e1a)',h:'22px'}];
-  el.innerHTML=top.map(function(team,idx){
-    if(!team)return '<div class="pp"></div>';
-    var m=medals[idx];var crown=idx===0?'\uD83D\uDC51':idx===1?'\uD83E\uDD48':'\uD83E\uDD49';var abbr=team.abbr||team.team.substring(0,4);
-    return '<div class="pp"><div style="font-size:1rem">'+crown+'</div><div class="pp-badge" style="border-color:'+m.border+';background:'+m.bg+';color:'+(team.color||m.txt)+'">'+abbr+'</div><div class="pp-name" style="color:'+(team.color||m.txt)+'">'+team.team+'</div><div class="pp-pts">'+n(team.points)+'</div><div class="pp-block" style="height:'+m.h+';background:'+m.blk+';color:'+(team.color||m.txt)+'">'+team.rank+'</div></div>';
+
+  /* Display order: 1st → 5th left to right */
+  var dispOrder=[0,1,2,3,4];
+  /* Block heights (px) by rank index (0=1st..4=5th) */
+  var blkH=[52,36,24,16,8];
+  var medals=['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49','4th','5th'];
+
+  el.innerHTML=dispOrder.map(function(idx){
+    var team=teams[idx]; if(!team)return '';
+    var clr=team.color||'#888';
+    var meta=TEAM_META[team.team];
+    var imgHtml=meta&&meta.avatar
+      ? '<img src="'+esc(meta.avatar)+'" style="width:'+(idx===0?'44':'36')+'px;height:'+(idx===0?'44':'36')+'px;border-radius:50%;object-fit:cover;border:2px solid '+esc(clr)+';box-shadow:0 0 8px '+esc(clr)+'88" alt="'+esc(team.team)+'" onerror="this.style.display=\'none\'">'
+      : '<div class="pp-badge" style="border-color:'+esc(clr)+';background:'+esc(clr)+'22;color:'+esc(clr)+'">'+(team.abbr||team.team.substring(0,4))+'</div>';
+    return '<div class="pp">'+
+      imgHtml+
+      '<div class="pp-name" style="color:'+esc(clr)+'">'+esc(team.team)+'</div>'+
+      '<div class="pp-pts" style="color:'+esc(clr)+'">'+n(team.points)+'</div>'+
+      '<div class="pp-block" style="height:'+blkH[idx]+'px;background:'+esc(clr)+'25;border-top:2px solid '+esc(clr)+';color:'+esc(clr)+'">'+medals[idx]+'</div>'+
+    '</div>';
   }).join('');
 }
 
@@ -688,7 +922,8 @@ function renderPlayersTable(){
 
     return '<tr class="'+rc+'">'+
       '<td class="left rc">'+rl+'</td>'+
-      '<td class="left player-name">'+r.player+
+      '<td class="left player-name">'+playerIcon(r.team)+
+        '<a href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(r.player)+'" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color=\'var(--gold-light)\'" onmouseout="this.style.color=\'\'">'+esc(r.player)+'</a>'+
         '<span class="team-badge" style="color:'+tc+';background:'+bg+'">'+r.teamAbbr+'</span>'+
       '</td>'+
       '<td class="col-mtt" style="color:var(--blue-light)">'+n(r.mtt)+'</td>'+
@@ -726,7 +961,7 @@ function renderLeaders(){
   cards.forEach(function(card){
     var rows=s[card.key]||[];if(!rows.length)return;
     var minNote=card.min?'(min '+card.min+' games)':'';
-    var rowsHtml=rows.map(function(p){var rc=p.rank<=3?'sc-r'+p.rank:'';var dot=p.teamColor?'<span class="sc-dot" style="background:'+p.teamColor+'"></span>':'';return '<tr class="sc-row '+rc+'"><td class="sc-rk">'+(p.rank<=3?rLbl(p.rank):p.rank)+'</td><td class="sc-name">'+dot+p.player+'</td><td class="sc-val">'+card.valFn(p)+(card.subFn?'<span class="sc-sub-val">'+card.subFn(p)+'</span>':'')+'</td></tr>';}).join('');
+    var rowsHtml=rows.map(function(p){var rc=p.rank<=3?'sc-r'+p.rank:'';var pIcon=playerIcon(p.team);return '<tr class="sc-row '+rc+'"><td class="sc-rk">'+(p.rank<=3?rLbl(p.rank):p.rank)+'</td><td class="sc-name">'+pIcon+'<a href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(p.player)+'" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color=\'var(--gold-light)\'" onmouseout="this.style.color=\'\'">'+esc(p.player)+'</a></td><td class="sc-val">'+card.valFn(p)+(card.subFn?'<span class="sc-sub-val">'+card.subFn(p)+'</span>':'')+'</td></tr>';}).join('');
     grid.innerHTML+='<div class="stat-card"><div class="sc-head"><span class="sc-icon">'+card.icon+'</span><span class="sc-title">'+card.title+'</span><span class="sc-min">'+minNote+'</span></div><div class="sc-body"><table class="sc-tbl"><tbody>'+rowsHtml+'</tbody></table></div></div>';
   });
   if(!grid.innerHTML)grid.innerHTML='<div class="empty-msg">No stats available for this period.</div>';
@@ -828,7 +1063,9 @@ function buildCard(data,opts){
       var v=(cellVal==null)?'':String(cellVal);
       var num=ci>0&&!isNaN(parseFloat(v.replace(/,/g,'')))&&v.trim()!=='';
       var disp=num?Number(parseFloat(v.replace(/,/g,''))).toLocaleString():v;
-      return '<td class="'+(ci===0?'lft':'')+(num?' val':'')+'">'+esc(disp)+'</td>';
+      var tmeta=(!num&&TEAM_META[v])?TEAM_META[v]:null;
+      var style=tmeta?' style="color:'+esc(tmeta.color)+';font-weight:700"':'';
+      return '<td class="'+(ci===0?'lft':'')+(num?' val':'')+'"'+style+'>'+esc(disp)+'</td>';
     }).join('');
     return '<tr class="'+rc+'">'+cells+'</tr>';
   }).join('');
@@ -847,48 +1084,69 @@ function buildCongratsCard(congratsTitle,congrats){
   return '<div class="lg-card lg-card-gold"><div class="lg-ch lg-ch-gold"><span class="lg-ch-title">'+esc(congratsTitle||'Congratulations')+'</span></div><div class="lg-cb">'+rowsHtml+'</div></div>';
 }
 
-/* Build trophy row from Team Total Points Today */
-function buildTrophy(teamTotal){
-  var medals=['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49'];
-  var cls=['t1','t2','t3'];
-  if(!teamTotal.rows.length)return '<div style="grid-column:1/-1;padding:12px;color:var(--text-muted);font-style:italic;text-align:center">Team totals not found</div>';
-  return teamTotal.rows.slice(0,3).map(function(row,i){
-    return '<div class="lg-trophy-card '+cls[i]+'">'+
-      '<div class="lg-trophy-medal">'+medals[i]+'</div>'+
-      '<div class="lg-trophy-name">'+esc(row[0])+'</div>'+
-      '<div class="lg-trophy-pts">'+n(row[1])+'</div>'+
-      '<div class="lg-trophy-label">TEAM POINTS TODAY</div>'+
+/* Build 5-team podium from Team Total Points Today (excludes New Recruits) */
+function buildLGPodium(teamTotal){
+  var all=(teamTotal.rows||[]).filter(function(r){return String(r[0]||'')!=='New Recruits';}).slice(0,5);
+  if(!all.length)return '<div style="flex:1;padding:16px;color:var(--text-muted);font-style:italic;text-align:center">No team data</div>';
+
+  /* Display order: 4th, 2nd, 1st, 3rd, 5th — classic podium arrangement */
+  var dispOrder=[3,1,0,2,4];
+  /* Block heights (px) indexed by sorted rank (0=1st) */
+  var blkH=[110,76,52,34,18];
+  var medals=['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49','4th','5th'];
+
+  return dispOrder.map(function(idx){
+    var row=all[idx]; if(!row)return '';
+    var tName=String(row[0]||'');
+    var meta=TEAM_META[tName];
+    var clr=(meta&&meta.color)||'#888';
+    var h=blkH[idx];
+    var avatarHtml=meta&&meta.avatar
+      ? '<img class="lg-pod-avatar" src="'+esc(meta.avatar)+'" style="border:2px solid '+esc(clr)+';box-shadow:0 0 12px '+esc(clr)+'77" alt="'+esc(tName)+'" onerror="this.style.display=\'none\'">'
+      : '';
+    return '<div class="lg-pod-slot">'+
+      avatarHtml+
+      '<div class="lg-pod-name" style="color:'+esc(clr)+'">'+esc(tName)+'</div>'+
+      '<div class="lg-pod-pts" style="color:'+esc(clr)+'">'+n(row[1])+'</div>'+
+      '<div class="lg-pod-block" style="height:'+h+'px;background:'+esc(clr)+'25;border-top:3px solid '+esc(clr)+';color:'+esc(clr)+'">'+medals[idx]+'</div>'+
     '</div>';
   }).join('');
 }
 
-/* Shared layout builder used by both Latest Game and Output tabs */
+/* Layout builder:
+   Left  — Attendance MTT (full-width top) | 2×2 grid (Penalties, TeamTotal, Month, Quarter) | Congrats (full-width bottom)
+   Right — Cutthroat (top, same width) | MTT | Combined stacked */
 function buildLayout(d){
-  /* ROW 1:
-     Col 1 (left): Cutthroat stacked above Attendance MTT
-     Col 2 (mid):  MTT
-     Col 3 (wide): Combined Points Earned */
-  var leftCol='<div class="lg-col-left">'+
-    buildCard(d.cutt,  {title:'Cutthroat Competition', headTheme:'lg-ch-green', cardCls:'lg-card-bright'})+
-    buildCard(d.attend,{title:'Attendence MTT',        headTheme:'lg-ch-dim',   cardCls:'lg-card-dim', rank:false})+
+  /* Left panel */
+  var attendTop='<div style="margin-bottom:12px">'+
+    buildCard(d.attend,{title:'Attendance MTT',headTheme:'lg-ch-dim',cardCls:'lg-card-dim',rank:false})+
   '</div>';
 
-  var row1='<div class="lg-row-large">'+
-    leftCol+
-    buildCard(d.mtt,     {title:'MTT',                   headTheme:'lg-ch-blue', cardCls:'lg-card-blue'})+
-    buildCard(d.combined,{title:'Combined Points Earned', headTheme:'lg-ch-gold', cardCls:'lg-card-gold'})+
+  var smallGrid='<div class="lg-left-2col">'+
+    '<div class="lg-col-left">'+
+      buildCard(d.penalties,{title:'Penalties',               headTheme:'lg-ch-dim',    cardCls:'lg-card-dim',  rank:false})+
+      buildCard(d.month,    {title:"This Month's Standings",  headTheme:'lg-ch-green'})+
+    '</div>'+
+    '<div class="lg-col-left">'+
+      buildCard(d.teamTotal,{title:'Team Total Points Today', headTheme:'lg-ch-bright', cardCls:'lg-card-bright'})+
+      buildCard(d.quarter,  {title:"This Quarter's Standings",headTheme:'lg-ch-green'})+
+    '</div>'+
   '</div>';
 
-  /* ROW 2 — 5 equal columns: Congrats | Penalties | Team Total | Month | Quarter */
-  var row2='<div class="lg-row-small">'+
+  var congratsWide='<div style="margin-top:12px">'+
     buildCongratsCard(d.congratsTitle,d.congrats)+
-    buildCard(d.penalties,{title:'Penalties',                headTheme:'lg-ch-dim',   cardCls:'lg-card-dim',    rank:false})+
-    buildCard(d.teamTotal,{title:'Team Total Points Today',  headTheme:'lg-ch-bright', cardCls:'lg-card-bright'})+
-    buildCard(d.month,    {title:"This Month's Standings",   headTheme:'lg-ch-green'})+
-    buildCard(d.quarter,  {title:"This Quarter's Standings", headTheme:'lg-ch-green'})+
   '</div>';
 
-  return row1+row2;
+  var leftPanel='<div class="lg-left-panel">'+attendTop+smallGrid+congratsWide+'</div>';
+
+  /* Right stack: Cutthroat on top, then MTT, then Combined */
+  var rightStack='<div class="lg-right-stack">'+
+    buildCard(d.cutt,    {title:'Cutthroat Competition', headTheme:'lg-ch-green',  cardCls:'lg-card-bright'})+
+    buildCard(d.mtt,     {title:'MTT',                   headTheme:'lg-ch-blue',   cardCls:'lg-card-blue'})+
+    buildCard(d.combined,{title:'Combined Points Earned', headTheme:'lg-ch-gold',   cardCls:'lg-card-gold'})+
+  '</div>';
+
+  return '<div class="lg-main-grid">'+leftPanel+rightStack+'</div>';
 }
 
 /* ══ LATEST GAME render ══ */
@@ -905,7 +1163,7 @@ function renderLatestGame(){
   if(!d){layoutEl.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-style:italic">Could not parse game data</div>';return;}
 
   bannerEl.innerHTML='<div class="lg-event-title">'+esc(d.title||'LATEST GAME RESULTS')+'</div>';
-  trophyEl.innerHTML=buildTrophy(d.teamTotal);
+  trophyEl.innerHTML=buildLGPodium(d.teamTotal);
   layoutEl.innerHTML=buildLayout(d);
 }
 
@@ -1002,10 +1260,113 @@ function renderOutputTab(){
   scrollEl.innerHTML=html;
 }
 
+/* ══ MEMBERS ════════════════════════════════════════════ */
+function renderMembers() {
+  var el = document.getElementById('membersGrid');
+  if (!el) return;
+  var teamOrder = ['KingzRatz','NAKED -PF-',"Phil's Pot Chasers",'QUEENzHEARTz','One Hit Wonders','New Recruits'];
+  el.innerHTML = teamOrder.map(function(teamName) {
+    var meta    = TEAM_META[teamName] || { color:'#888', avatar:'' };
+    var members = MEMBERS[teamName] || [];
+    var memberLinks = members.map(function(name) {
+      return '<a class="team-member-link" href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(name)+'" target="_blank">'+esc(name)+'</a>';
+    }).join('');
+    return '<div class="team-card">'+
+      (meta.avatar ? '<img class="team-card-avatar" src="'+esc(meta.avatar)+'" alt="'+esc(teamName)+'" style="border-color:'+esc(meta.color)+';box-shadow:0 0 18px '+esc(meta.color)+'55" onerror="this.style.display=\'none\'">' : '')+
+      '<div class="team-card-name" style="color:'+esc(meta.color)+'">'+esc(teamName)+'</div>'+
+      '<div class="team-card-divider" style="background:'+esc(meta.color)+'"></div>'+
+      '<div class="team-member-list">'+(memberLinks||'<span style="color:var(--text-muted);font-style:italic;padding:8px;display:block;text-align:center">No members listed</span>')+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ══ THEME TOGGLE ═══════════════════════════════════════ */
+function toggleTheme(){
+  var isLight=document.body.classList.toggle('light');
+  var btn=document.getElementById('themeBtn');
+  if(btn) btn.textContent=isLight?'\u2600 DARK':'\u2600 LIGHT';
+}
+
+/* ══ SCREENSHOT / COPY TO CLIPBOARD ════════════════════ */
+function captureTab(){
+  var sectionId='section-'+activeTab;
+  var el=document.getElementById(sectionId);
+  if(!el){alert('Nothing to capture.');return;}
+  var btn=document.querySelector('.hdr-screenshot');
+  if(btn){btn.textContent='\u23F3 CAPTURING\u2026';btn.disabled=true;}
+  html2canvas(el,{backgroundColor:document.body.classList.contains('light')?'#F5F8F2':'#050d05',scale:2,useCORS:true,logging:false})
+    .then(function(canvas){
+      canvas.toBlob(function(blob){
+        if(!blob){throw new Error('Canvas to blob failed');}
+        return navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+      },'image/png');
+    })
+    .then(function(){
+      if(btn){btn.textContent='\u2713 COPIED!';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TAB';btn.disabled=false;},2000);}
+    })
+    .catch(function(err){
+      console.error('captureTab error:',err);
+      if(btn){btn.textContent='\u26A0 FAILED';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TAB';btn.disabled=false;},2000);}
+      alert('Copy failed: '+err.message+'\nTry a different browser or check clipboard permissions.');
+    });
+}
+
+/* ══ CALENDAR ═══════════════════════════════════════════ */
+function setCalFilter(f){
+  calFilter=f;
+  ['all','running','registering','announced','finished'].forEach(function(s){
+    var el=document.getElementById('cpill-'+s);
+    if(el) el.className='cal-pill'+(s==='running'?' pill-run':s==='registering'?' pill-reg':s==='announced'?' pill-ann':s==='finished'?' pill-fin':'')+(s===f?' active':'');
+  });
+  renderCalTab();
+}
+
+function renderCalTab(){
+  var section=document.getElementById('calSection');
+  var countEl=document.getElementById('calCount');
+  if(!section) return;
+  var now=new Date();
+  var filtered=TOURNAMENTS.filter(function(t){
+    return calFilter==='all'||t.status===calFilter;
+  });
+  countEl.textContent=filtered.length+' tournament'+(filtered.length!==1?'s':'');
+  if(!filtered.length){
+    section.innerHTML='<div class="cal-empty">No tournaments found'+(calFilter!=='all'?' for this filter':'')+'.</div>';
+    return;
+  }
+  /* Group by date */
+  var groups={};var groupOrder=[];
+  filtered.forEach(function(t){
+    var d=new Date(t.start);
+    var key=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    if(!groups[key]){groups[key]=[];groupOrder.push({key:key,date:d});}
+    groups[key].push(t);
+  });
+  groupOrder.sort(function(a,b){return a.date-b.date;});
+  var html='';
+  groupOrder.forEach(function(g){
+    var todayKey=now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    var isToday=g.key===todayKey;
+    html+='<div class="cal-date-group"><div class="cal-date-hdr'+(isToday?' today':'')+'">'+(isToday?'\u2600\uFE0F TODAY \u2014 ':'')+esc(g.key)+'</div>';
+    groups[g.key].forEach(function(t){
+      var d=new Date(t.start);
+      var timeStr=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+      var statusCls=t.status||'announced';
+      var statusLbl={'running':'LIVE','registering':'OPEN','announced':'UPCOMING','finished':'ENDED'}[statusCls]||statusCls.toUpperCase();
+      html+='<div class="cal-card">'
+        +'<div><div class="cal-name">'+esc(t.name)+'</div>'
+        +'<div class="cal-meta">'+esc(t.game||'')+(t.chips?' &nbsp;·&nbsp; '+n(t.chips)+' chips':'')+(t.addOn?' &nbsp;·&nbsp; add-on':'')+'</div>'
+        +(t.link?'<a class="cal-link" href="'+esc(t.link)+'" target="_blank" rel="noopener">&#128279; LINK TO TOURNAMENT</a>':'')+'</div>'
+        +'<div><div class="cal-time">'+esc(timeStr)+'</div>'
+        +'<div class="cal-status '+statusCls+'">'+statusLbl+'</div></div>'
+        +'</div>';
+    });
+    html+='</div>';
+  });
+  section.innerHTML=html;
+}
+
 loadData(false);
 </script>
-  <div style="text-align: center; margin-top: 30px; padding-bottom: 30px;">
-  <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Frainsplace.github.io%2FEBApp%2F&label=Visits&icon=cloud-drizzle&color=%23198754&message=&style=flat&tz=US%2FEastern" alt="App Visits">
-</div>
 </body>
 </html>
