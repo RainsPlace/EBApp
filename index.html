@@ -505,8 +505,8 @@
   <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:4px">
     <div class="live-badge"><span class="live-dot"></span> LIVE DATA</div>
     <button class="hdr-refresh" id="hdrRefreshBtn" onclick="loadData(true)"><span class="rih">&#8635;</span> REFRESH</button>
-    <button class="hdr-screenshot" onclick="captureTab()">&#128247; COPY TAB</button>
-    <button class="hdr-theme" id="themeBtn" onclick="toggleTheme()">&#9788; LIGHT</button>
+    <button class="hdr-screenshot" onclick="captureTab()">&#128247; COPY TO CLIPBOARD</button>
+    <button class="hdr-theme" id="themeBtn" onclick="toggleTheme()">&#9788; SWITCH TO LIGHT THEME</button>
   </div>
   <div class="updated-time" id="updatedTime"></div>
 </header>
@@ -1284,7 +1284,7 @@ function renderMembers() {
 function toggleTheme(){
   var isLight=document.body.classList.toggle('light');
   var btn=document.getElementById('themeBtn');
-  if(btn) btn.textContent=isLight?'\u2600 DARK':'\u2600 LIGHT';
+  if(btn) btn.textContent=isLight?'\u2600 SWITCH TO DARK THEME':'\u2600 SWITCH TO LIGHT THEME';
 }
 
 /* ══ SCREENSHOT / COPY TO CLIPBOARD ════════════════════ */
@@ -1302,11 +1302,11 @@ function captureTab(){
       },'image/png');
     })
     .then(function(){
-      if(btn){btn.textContent='\u2713 COPIED!';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TAB';btn.disabled=false;},2000);}
+      if(btn){btn.textContent='\u2713 COPIED!';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TO CLIPBOARD';btn.disabled=false;},2000);}
     })
     .catch(function(err){
       console.error('captureTab error:',err);
-      if(btn){btn.textContent='\u26A0 FAILED';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TAB';btn.disabled=false;},2000);}
+      if(btn){btn.textContent='\u26A0 FAILED';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TO CLIPBOARD';btn.disabled=false;},2000);}
       alert('Copy failed: '+err.message+'\nTry a different browser or check clipboard permissions.');
     });
 }
