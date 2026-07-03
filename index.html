@@ -654,6 +654,7 @@ var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyFPUX9EYA6LQokYFudgpZ
 
 var DATA={}; var STATS={}; var TEAMS={}; var QUARTERS=[];
 var LATEST_GAME=null; var OUTPUT_DATA=null; var TOURNAMENTS=[]; var MEMBERS={};
+var STATS_LOADED=false; var STATS_LOADING=false;
 var activeTab='standings'; var activePeriod='Overall'; var activeEtype='total';
 var calFilter='registering';
 
@@ -696,9 +697,11 @@ function loadData(isRefresh){
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(json){
       if(json.error)throw new Error(json.error);
-      DATA=json.data||{}; STATS=json.stats||{}; TEAMS=json.teams||{};
+      DATA=json.data||{}; TEAMS=json.teams||{};
       QUARTERS=json.quarters||[]; LATEST_GAME=json.latestGame||null; OUTPUT_DATA=json.output||null;
       TOURNAMENTS=json.tournaments||[]; MEMBERS=json.members||{};
+      // Stats are loaded lazily on first Leaders tab open
+      STATS={}; STATS_LOADED=false; STATS_LOADING=false;
       var sel=document.getElementById('quarterSelect'); var prev=sel.value;
       sel.innerHTML='';
       QUARTERS.forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
@@ -946,7 +949,28 @@ document.addEventListener('click',function(e){
 
 /* ══ LEADERS ════════════════════════════════════════════ */
 function renderLeaders(){
-  var s=STATS[activePeriod]||STATS['Overall']||{};var grid=document.getElementById('leadersGrid');grid.innerHTML='';
+  var grid=document.getElementById('leadersGrid');
+  // Lazy-load stats on first visit to this tab
+  if(!STATS_LOADED){
+    if(!STATS_LOADING){
+      STATS_LOADING=true;
+      grid.innerHTML='<div class="empty-msg" style="padding:40px">Loading stats…</div>';
+      var surl=WEBAPP_URL+(WEBAPP_URL.indexOf('?')!==-1?'&':'?')+'get=stats&_='+Date.now();
+      fetch(surl)
+        .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+        .then(function(json){
+          if(json.error)throw new Error(json.error);
+          STATS=json.stats||{};STATS_LOADED=true;STATS_LOADING=false;
+          renderLeaders();
+        })
+        .catch(function(err){
+          STATS_LOADING=false;
+          grid.innerHTML='<div class="empty-msg">Failed to load stats: '+esc(err.message)+'</div>';
+        });
+    }
+    return;
+  }
+  var s=STATS[activePeriod]||STATS['Overall']||{};grid.innerHTML='';
   var minG=activePeriod==='Overall'?5:3;
   var cards=[
     {icon:'\u2B50',title:'Most Points (Total)',key:'top_total',  valFn:function(p){return n(p.total);}, subFn:function(p){return p.games+' games';}},
