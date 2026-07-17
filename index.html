@@ -54,11 +54,20 @@
   .hdr-refresh:hover { color:var(--gold); border-color:var(--gold-dim); }
   .hdr-refresh.spinning .rih { display:inline-block; animation:spin .6s linear infinite; }
 
-  /* TAB NAV */
-  .tab-nav { display:flex; background:var(--bg-dark); border-bottom:2px solid var(--border-gold); overflow-x:auto; }
-  .tab-btn { font-family:'Cinzel',serif; font-size:.9rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; padding:15px 28px; cursor:pointer; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; background:transparent; color:var(--text-dim); transition:all .2s; white-space:nowrap; }
-  .tab-btn:hover { color:var(--gold-dim); }
-  .tab-btn.active { color:var(--gold); border-bottom-color:var(--gold); background:rgba(212,168,67,.05); }
+  /* SIDEBAR LAYOUT */
+  .app-layout { display:flex; flex-direction:row; min-height:calc(100vh - 140px); align-items:stretch; }
+  .sidebar { width:190px; flex-shrink:0; background:var(--bg-card); border-right:1px solid var(--border); padding:14px 10px 24px; display:flex; flex-direction:column; gap:3px; overflow-y:auto; }
+  .main-content { flex:1; min-width:0; overflow-x:hidden; }
+  .nav-section-label { font-family:'Cinzel',serif; font-size:.6rem; font-weight:700; letter-spacing:.24em; color:var(--text-muted); text-transform:uppercase; padding:10px 10px 3px; }
+  .nav-item { display:block; width:100%; text-align:left; padding:7px 14px; border-radius:50px; border:1px solid rgba(86,176,80,.2); background:transparent; color:var(--text-dim); font-family:'Cinzel',serif; font-size:.67rem; font-weight:700; letter-spacing:.07em; cursor:pointer; transition:all .2s; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .nav-item:hover { background:var(--bg-panel); color:var(--text-main); border-color:rgba(86,176,80,.5); }
+  .nav-item.active { background:rgba(86,176,80,.12); color:var(--green-light); border-color:var(--green-dim); }
+  @media(max-width:700px) { .app-layout { flex-direction:column; } .sidebar { width:100%; flex-direction:row; flex-wrap:wrap; padding:8px 10px; gap:4px; } .nav-section-label { display:none; } .nav-item { width:auto; flex-shrink:0; } }
+  body.light .sidebar { background:#FFFFFF; border-right-color:#C0D4B4; }
+  body.light .nav-item { color:#2E5E2E; border-color:rgba(27,107,24,.2); }
+  body.light .nav-item:hover { background:#ECF2E8; color:#0D2B0D; border-color:rgba(27,107,24,.5); }
+  body.light .nav-item.active { background:rgba(27,107,24,.08); color:#0F4D0D; border-color:#2E8B2E; }
+  body.light .nav-section-label { color:#4A7A4A; }
 
   /* CONTROLS */
   .controls { display:flex; align-items:center; justify-content:center; gap:18px; padding:16px 24px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-wrap:wrap; }
@@ -536,16 +545,23 @@
   <div class="updated-time" id="updatedTime"></div>
 </header>
 
-<div class="tab-nav">
-  <button class="tab-btn active" id="tab-standings" onclick="switchTab('standings')">&#127942; TEAM STANDINGS</button>
-  <button class="tab-btn"        id="tab-players"   onclick="switchTab('players')">&#9824; PLAYERS INDIVIDUAL</button>
-  <button class="tab-btn"        id="tab-leaders"   onclick="switchTab('leaders')">&#9733; LEADERS</button>
-  <button class="tab-btn"        id="tab-latest"    onclick="switchTab('latest')">&#9728; LATEST GAME</button>
-  <button class="tab-btn"        id="tab-output"    onclick="switchTab('output')">&#9741; RESULTS</button>
-  <button class="tab-btn"        id="tab-calendar"  onclick="switchTab('calendar')">&#128197; CALENDAR</button>
-  <button class="tab-btn"        id="tab-members"   onclick="switchTab('members')">&#128101; MEMBERS</button>
-  <button class="tab-btn"        id="tab-leagueinfo" onclick="switchTab('leagueinfo')">🗺 LEAGUES INFO</button>
-</div>
+<div class="app-layout">
+<nav class="sidebar">
+  <div class="nav-section-label">STANDINGS</div>
+  <div class="nav-item active" data-tab="standings" onclick="switchTab('standings')">🏆 Team Standings</div>
+  <div class="nav-item" data-tab="players" onclick="switchTab('players')">♠ Players Individual</div>
+  <div class="nav-section-label">INSIGHTS</div>
+  <div class="nav-item" data-tab="leaders" onclick="switchTab('leaders')">★ Leaders</div>
+  <div class="nav-section-label">GAMES</div>
+  <div class="nav-item" data-tab="latest" onclick="switchTab('latest')">☀ Latest Game</div>
+  <div class="nav-item" data-tab="output" onclick="switchTab('output')">✦ Results</div>
+  <div class="nav-item" data-tab="calendar" onclick="switchTab('calendar')">📅 Calendar</div>
+  <div class="nav-section-label">TEAM</div>
+  <div class="nav-item" data-tab="members" onclick="switchTab('members')">👥 Members</div>
+  <div class="nav-section-label">INFO</div>
+  <div class="nav-item" data-tab="leagueinfo" onclick="switchTab('leagueinfo')">🗺 Leagues Info</div>
+</nav>
+<div class="main-content">
 
 <div id="ctrl-main" class="controls">
   <div style="display:flex;align-items:center;gap:10px">
@@ -864,6 +880,9 @@
 </div>
 </div><!-- end section-leagueinfo -->
 
+</div><!-- end main-content -->
+</div><!-- end app-layout -->
+
 <footer>
   <span class="fr">✦ ♠ ♥ ♦ ♣ ✦</span>
   Early Bird Team Poker League &nbsp;·&nbsp; Live data from Google Sheets
@@ -913,27 +932,39 @@ function cell(grid,r,c){
   var v=row[c-1]; return (v==null)?'':String(v).trim();
 }
 
+var EB_SS_KEY='eb_wa_primary_v1';
+var EB_SS_TTL=20*60*1000;
+
+function applyData(json){
+  DATA=json.data||{}; TEAMS=json.teams||{};
+  QUARTERS=json.quarters||[]; LATEST_GAME=json.latestGame||null; OUTPUT_DATA=json.output||null;
+  TOURNAMENTS=json.tournaments||[]; MEMBERS=json.members||{};
+  STATS={}; STATS_LOADED=false; STATS_LOADING=false;
+  var sel=document.getElementById('quarterSelect'); var prev=sel.value;
+  sel.innerHTML='';
+  QUARTERS.forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
+  if(prev&&QUARTERS.indexOf(prev)!==-1)sel.value=prev;
+  if(json.updated){var d=new Date(json.updated);document.getElementById('updatedTime').textContent='Data as of '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
+  buildPeriodBar(); renderAll(); revealApp();
+}
+
 function loadData(isRefresh){
+  if(!isRefresh){
+    try{
+      var cached=sessionStorage.getItem(EB_SS_KEY);
+      if(cached){var obj=JSON.parse(cached);if(Date.now()-obj.ts<EB_SS_TTL){applyData(obj.payload);return;}}
+    }catch(e){}
+  }
   if(isRefresh){var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.add('spinning');b.disabled=true;}}
-  var url=WEBAPP_URL+(WEBAPP_URL.indexOf('?')!==-1?'&':'?')+'_='+Date.now();
-  fetch(url)
+  fetch(WEBAPP_URL+'?get=data')
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(json){
       if(json.error)throw new Error(json.error);
-      DATA=json.data||{}; TEAMS=json.teams||{};
-      QUARTERS=json.quarters||[]; LATEST_GAME=json.latestGame||null; OUTPUT_DATA=json.output||null;
-      TOURNAMENTS=json.tournaments||[]; MEMBERS=json.members||{};
-      // Stats are loaded lazily on first Leaders tab open
-      STATS={}; STATS_LOADED=false; STATS_LOADING=false;
-      var sel=document.getElementById('quarterSelect'); var prev=sel.value;
-      sel.innerHTML='';
-      QUARTERS.forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
-      if(prev&&QUARTERS.indexOf(prev)!==-1)sel.value=prev;
-      if(json.updated){var d=new Date(json.updated);document.getElementById('updatedTime').textContent='Data as of '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
-      buildPeriodBar(); renderAll(); revealApp();
+      try{sessionStorage.setItem(EB_SS_KEY,JSON.stringify({ts:Date.now(),payload:json}));}catch(e){}
+      applyData(json);
     })
     .catch(function(err){
-      if(document.getElementById('app').style.display==='none')showError(err.message+'<br><br>'+url);
+      if(document.getElementById('app').style.display==='none')showError(err.message+'<br><br>'+WEBAPP_URL);
       else console.error('Refresh error:',err.message);
     })
     .finally(function(){if(isRefresh){var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.remove('spinning');b.disabled=false;}}});
@@ -952,8 +983,10 @@ function showError(msg){
 
 function switchTab(tab){
   activeTab=tab;
+  document.querySelectorAll('.nav-item').forEach(function(el){
+    el.classList.toggle('active', el.dataset.tab===tab);
+  });
   ['standings','players','leaders','latest','output','calendar','members','leagueinfo'].forEach(function(t){
-    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
     document.getElementById('section-'+t).style.display=t===tab?'':'none';
   });
   document.getElementById('ctrl-main').style.display=(tab==='standings'||tab==='players')?'':'none';
