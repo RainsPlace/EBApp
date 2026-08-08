@@ -944,42 +944,57 @@ function cell(grid,r,c){
   var v=row[c-1]; return (v==null)?'':String(v).trim();
 }
 
-var EB_SS_KEY='eb_wa_primary_v1';
-var EB_SS_TTL=20*60*1000;
+var EB_LS_KEY='eb_wa_data_v2';
+var EB_LS_STATS_KEY='eb_wa_stats_v2';
 
-function applyData(json){
+function applyData(json, isBackground){
   DATA=json.data||{}; TEAMS=json.teams||{};
   QUARTERS=json.quarters||[]; LATEST_GAME=json.latestGame||null; OUTPUT_DATA=json.output||null;
   TOURNAMENTS=json.tournaments||[]; MEMBERS=json.members||{};
-  STATS={}; STATS_LOADED=false; STATS_LOADING=false;
+  if(!isBackground){STATS={}; STATS_LOADED=false; STATS_LOADING=false;}
   var sel=document.getElementById('quarterSelect'); var prev=sel.value;
   sel.innerHTML='';
   QUARTERS.forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
   if(prev&&QUARTERS.indexOf(prev)!==-1)sel.value=prev;
   if(json.updated){var d=new Date(json.updated);document.getElementById('updatedTime').textContent='Data as of '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
-  buildPeriodBar(); renderAll(); revealApp();
+  buildPeriodBar(); renderAll();
+  if(!isBackground) revealApp();
 }
 
 function loadData(isRefresh){
-  if(!isRefresh){
-    try{
-      var cached=sessionStorage.getItem(EB_SS_KEY);
-      if(cached){var obj=JSON.parse(cached);if(Date.now()-obj.ts<EB_SS_TTL){applyData(obj.payload);return;}}
-    }catch(e){}
+  if(isRefresh){
+    try{localStorage.removeItem(EB_LS_KEY);localStorage.removeItem(EB_LS_STATS_KEY);}catch(e){}
+    STATS={}; STATS_LOADED=false; STATS_LOADING=false;
+    var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.add('spinning');b.disabled=true;}
+    fetchFresh(false);
+    return;
   }
-  if(isRefresh){var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.add('spinning');b.disabled=true;}}
+  // localStorage first — reveal instantly, then silently refresh in background
+  try{
+    var cached=localStorage.getItem(EB_LS_KEY);
+    if(cached){applyData(JSON.parse(cached),false);fetchFresh(true);return;}
+  }catch(e){}
+  // No cache — wait for first load
+  fetchFresh(false);
+}
+
+function fetchFresh(isBackground){
   fetch(WEBAPP_URL+'?get=data')
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(json){
       if(json.error)throw new Error(json.error);
-      try{sessionStorage.setItem(EB_SS_KEY,JSON.stringify({ts:Date.now(),payload:json}));}catch(e){}
-      applyData(json);
+      try{localStorage.setItem(EB_LS_KEY,JSON.stringify(json));}catch(e){}
+      applyData(json,isBackground);
     })
     .catch(function(err){
-      if(document.getElementById('app').style.display==='none')showError(err.message+'<br><br>'+WEBAPP_URL);
-      else console.error('Refresh error:',err.message);
+      if(!isBackground){
+        if(document.getElementById('app').style.display==='none')showError(err.message+'<br><br>'+WEBAPP_URL);
+        else console.error('Refresh error:',err.message);
+      }else{
+        console.warn('Background refresh error:',err.message);
+      }
     })
-    .finally(function(){if(isRefresh){var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.remove('spinning');b.disabled=false;}}});
+    .finally(function(){var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.remove('spinning');b.disabled=false;}});
 }
 
 function revealApp(){
@@ -1222,12 +1237,18 @@ function renderLeaders(){
   if(!STATS_LOADED){
     if(!STATS_LOADING){
       STATS_LOADING=true;
+      // localStorage first — instant on repeat visits
+      try{
+        var sc=localStorage.getItem(EB_LS_STATS_KEY);
+        if(sc){var sp=JSON.parse(sc);STATS=sp.stats||{};STATS_LOADED=true;STATS_LOADING=false;renderLeaders();return;}
+      }catch(e){}
       grid.innerHTML='<div class="empty-msg" style="padding:40px">Loading stats…</div>';
       var surl=WEBAPP_URL+(WEBAPP_URL.indexOf('?')!==-1?'&':'?')+'get=stats&_='+Date.now();
       fetch(surl)
         .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
         .then(function(json){
           if(json.error)throw new Error(json.error);
+          try{localStorage.setItem(EB_LS_STATS_KEY,JSON.stringify(json));}catch(e){}
           STATS=json.stats||{};STATS_LOADED=true;STATS_LOADING=false;
           renderLeaders();
         })
@@ -1819,8 +1840,8 @@ function copyCalGroup(dateKey,btn){
   if(!ts.length)return;
   if(btn){btn.disabled=true;btn.textContent='Copying…';}
 
-  var hLines=['<meta charset="utf-8"><strong>Our Next Upcoming Poker Event</strong><br><br>'];
-  var tLines=['Our Next Upcoming Poker Event',''];
+  var hLines=['<meta charset="utf-8"><strong>The Next Early Bird League Tournaments</strong><br><br>'];
+  var tLines=['The Next Early Bird League Tournaments',''];
 
   ts.forEach(function(t,i){
     if(i>0){hLines.push('<br>');tLines.push('');}
