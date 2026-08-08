@@ -565,7 +565,7 @@
   <div class="nav-item" data-tab="leaders" onclick="switchTab('leaders')">★ Leaders</div>
   <div class="nav-section-label">GAMES</div>
   <div class="nav-item" data-tab="latest" onclick="switchTab('latest')">☀ Latest Game</div>
-  <div class="nav-item" data-tab="output" onclick="switchTab('output')">✦ Results</div>
+  <div class="nav-item" data-tab="output" onclick="switchTab('output')">✦ Latest Results</div>
   <div class="nav-item" data-tab="calendar" onclick="switchTab('calendar')">📅 Calendar</div>
   <div class="nav-section-label">TEAM</div>
   <div class="nav-item" data-tab="members" onclick="switchTab('members')">👥 Members</div>
@@ -1783,6 +1783,8 @@ function copyOutputAsText(){
   if(btn){btn.disabled=true;btn.textContent='Copying…';}
 
   var mainTitle=((OUTPUT_DATA[0]&&OUTPUT_DATA[0][1])||'RESULTS').toString().trim();
+  var lgd=parseLG();
+  var lines=lgd&&lgd.gameName?[lgd.gameName,mainTitle,'']:[mainTitle,''];
 
   /* Parse sections — same logic as renderOutputTab */
   var sections=[];
@@ -1809,7 +1811,6 @@ function copyOutputAsText(){
   if(cur&&cur.rows.length)sections.push(cur);
 
   /* Build plain text */
-  var lines=[mainTitle,''];
   sections.forEach(function(sec,si){
     if(si>0)lines.push('');
     if(sec.hdr){lines.push(sec.hdr.toUpperCase());lines.push(new Array(Math.min(sec.hdr.length,50)+1).join('-'));}
