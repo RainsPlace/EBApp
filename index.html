@@ -1285,7 +1285,7 @@ function renderLeaders(){
   Row 3 B:P  = title banner "Early Bird League Results for {date}"
   Cutthroat : hdr B5:E5  col-hdrs row 6 cols 2-5   data rows 7-11  cols 2-5
   Congrats  : hdr G5:K5  key cols G-I merged / val cols J-K merged  rows 7,9,11,13,15,17
-  Attend MTT: hdr M5:N5  col-hdrs row 6 cols 13-14  data rows 7-11 cols 13-14
+  Attend MTT: hdr M5:N5  col-hdrs row 6 cols 13-14  data rows 7-11 cols 13-14  (col 13=# Players, col 14=Team)
   MTT       : hdr B15:E15 col-hdrs row 16 cols 2-5  data rows 17+  cols 2-5
   Combined  : hdr M14:P14 col-hdrs row 15 cols 13-16 data rows 16+ cols 13-16
   Penalties : hdr G21:H21 col-hdrs row 22 cols 7-8  data rows 23-27 cols 7-8
@@ -1322,9 +1322,9 @@ function parseLG(){
   var cutt={colHdrs:[cv(6,2),cv(6,3),cv(6,4),cv(6,5)],rows:[]};
   for(var r=7;r<=11;r++){if(!cv(r,3))continue;cutt.rows.push([cv(r,2),cv(r,3),cv(r,4),cvN(r,5)]);}
 
-  /* Attendance MTT: col-hdrs row 6 cols M-N (13-14), data rows 7-11 cols 13-14 */
-  var attend={colHdrs:[cv(6,13),cv(6,14)],rows:[]};
-  for(var r=7;r<=11;r++){if(!cv(r,13))continue;attend.rows.push([cv(r,13),cvN(r,14)]);}
+  /* Attendance MTT: col-hdrs row 6 cols M-N (13-14); col M=# Players, col N=Team (swapped Aug 15 2026) */
+  var attend={colHdrs:[cv(6,14),cv(6,13)],rows:[]};
+  for(var r=7;r<=11;r++){if(!cv(r,14))continue;attend.rows.push([cv(r,14),cvN(r,13)]);}
 
   /* Attendance Cutt: col-hdrs row 6 cols O-P (15-16), data rows 7-11 cols 15-16 */
   var attendCutt={colHdrs:[cv(6,15),cv(6,16)],rows:[]};
@@ -1402,7 +1402,7 @@ function buildCongratsCard(congratsTitle,congrats){
   var rowsHtml=congrats.map(function(kv){
     return '<div class="lg-kv"><span class="lg-kv-key">'+esc(kv.key)+'</span><span class="lg-kv-val">'+esc(kv.val)+'</span></div>';
   }).join('');
-  return '<div class="lg-card lg-card-gold"><div class="lg-ch lg-ch-gold"><span class="lg-ch-title">'+esc(congratsTitle||'Congratulations')+'</span></div><div class="lg-cb">'+rowsHtml+'</div></div>';
+  return '<div class="lg-card lg-card-bright"><div class="lg-ch lg-ch-gold"><span class="lg-ch-title">'+esc(congratsTitle||'Congratulations')+'</span></div><div class="lg-cb">'+rowsHtml+'</div></div>';
 }
 
 /* Build 5-team podium from Team Total Points Today (excludes New Recruits) */
@@ -1440,17 +1440,17 @@ function buildLGPodium(teamTotal){
 function buildLayout(d){
   /* Left panel */
   var attendTop='<div style="margin-bottom:12px">'+
-    buildCard(d.attend,{title:'Attendance MTT',headTheme:'lg-ch-dim',cardCls:'lg-card-dim',rank:false})+
+    buildCard(d.attend,{title:'Attendance MTT',headTheme:'lg-ch-dim',cardCls:'lg-card-bright',rank:false})+
   '</div>';
 
   var smallGrid='<div class="lg-left-2col">'+
     '<div class="lg-col-left">'+
-      buildCard(d.penalties,{title:'Penalties',               headTheme:'lg-ch-dim',    cardCls:'lg-card-dim',  rank:false})+
-      buildCard(d.month,    {title:"This Month's Standings",  headTheme:'lg-ch-green'})+
+      buildCard(d.penalties,{title:'Penalties',               headTheme:'lg-ch-dim',    cardCls:'lg-card-bright',  rank:false})+
+      buildCard(d.month,    {title:"This Month's Standings",  headTheme:'lg-ch-green',  cardCls:'lg-card-bright'})+
     '</div>'+
     '<div class="lg-col-left">'+
       buildCard(d.teamTotal,{title:'Team Total Points Today', headTheme:'lg-ch-bright', cardCls:'lg-card-bright'})+
-      buildCard(d.quarter,  {title:"This Quarter's Standings",headTheme:'lg-ch-green'})+
+      buildCard(d.quarter,  {title:"This Quarter's Standings",headTheme:'lg-ch-green',  cardCls:'lg-card-bright'})+
     '</div>'+
   '</div>';
 
@@ -1463,8 +1463,8 @@ function buildLayout(d){
   /* Right stack: Cutthroat on top, then MTT, then Combined */
   var rightStack='<div class="lg-right-stack">'+
     buildCard(d.cutt,    {title:'Cutthroat Competition', headTheme:'lg-ch-green',  cardCls:'lg-card-bright'})+
-    buildCard(d.mtt,     {title:'MTT',                   headTheme:'lg-ch-blue',   cardCls:'lg-card-blue'})+
-    buildCard(d.combined,{title:'Combined Points Earned', headTheme:'lg-ch-gold',   cardCls:'lg-card-gold'})+
+    buildCard(d.mtt,     {title:'MTT',                   headTheme:'lg-ch-blue',   cardCls:'lg-card-bright'})+
+    buildCard(d.combined,{title:'Combined Points Earned', headTheme:'lg-ch-gold',   cardCls:'lg-card-bright'})+
   '</div>';
 
   return '<div class="lg-main-grid">'+leftPanel+rightStack+'</div>';
@@ -1704,7 +1704,7 @@ function renderOutputTab(){
   var sections=[];
   var cur=null;
 
-  for(var i=1;i<Math.min(OUTPUT_DATA.length,110);i++){
+  for(var i=1;i<Math.min(OUTPUT_DATA.length,200);i++){
     var row=OUTPUT_DATA[i]||[];
     var a=((row[0]||'').toString().trim());
     var b=((row[1]||'').toString().trim());
@@ -1734,6 +1734,14 @@ function renderOutputTab(){
       continue;
     }
 
+    if(!a&&b&&c){
+      /* col B = label, col C = value — attendance / penalty rows with no rank */
+      if(!cur)cur={hdr:'',sub:'',rows:[]};
+      var pts0=parseFloat(c.replace(/,/g,''));
+      cur.rows.push({type:'data',place:'',name:b,pts:isNaN(pts0)?null:pts0});
+      continue;
+    }
+
     if(a&&b){
       /* data row: place=A, name=B, pts=C */
       if(!cur)cur={hdr:'',sub:'',rows:[]};
@@ -1759,7 +1767,7 @@ function renderOutputTab(){
       if(r.type==='announce'){
         html+='<div class="out-announce">'+esc(r.text)+'</div>';
       } else {
-        var rowCls=ri===0?'rg':ri===1?'rs':ri===2?'rb':'';
+        var rowCls=r.place?(ri===0?'rg':ri===1?'rs':ri===2?'rb':''):'';
         var ptsHtml=r.pts!=null?'<span class="out-pts">'+Number(r.pts).toLocaleString()+'</span>':'';
         html+='<div class="out-row '+rowCls+'">'+
           '<span class="out-place">'+esc(r.place)+'</span>'+
@@ -1789,7 +1797,7 @@ function copyOutputAsText(){
   /* Parse sections — same logic as renderOutputTab */
   var sections=[];
   var cur=null;
-  for(var i=1;i<Math.min(OUTPUT_DATA.length,110);i++){
+  for(var i=1;i<Math.min(OUTPUT_DATA.length,200);i++){
     var row=OUTPUT_DATA[i]||[];
     var a=((row[0]||'').toString().trim());
     var b=((row[1]||'').toString().trim());
@@ -1799,6 +1807,12 @@ function copyOutputAsText(){
       if(b.startsWith('(')){if(!cur)cur={hdr:'',sub:'',rows:[]};cur.sub=b;}
       else if(b.length>40){if(!cur)cur={hdr:'',sub:'',rows:[]};cur.rows.push({type:'announce',text:b});}
       else{if(cur&&cur.rows.length){sections.push(cur);cur=null;}cur={hdr:b,sub:'',rows:[]};}
+      continue;
+    }
+    if(!a&&b&&c){
+      if(!cur)cur={hdr:'',sub:'',rows:[]};
+      var pts1=parseFloat(c.replace(/,/g,''));
+      cur.rows.push({type:'data',place:'',name:b,pts:isNaN(pts1)?null:pts1});
       continue;
     }
     if(a&&b){
