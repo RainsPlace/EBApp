@@ -1217,7 +1217,7 @@ function renderPlayersTable(){
     return '<tr class="'+rc+'">'+
       '<td class="left rc">'+rl+'</td>'+
       '<td class="left player-name">'+playerIcon(r.team)+
-        '<a href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(r.player)+'" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color=\'var(--gold-light)\'" onmouseout="this.style.color=\'\'">'+esc(r.player)+'</a>'+
+        '<a href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(r.player)+'" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color=\'var(--gold-light)\'" onmouseout="this.style.color=\'inherit\'">'+esc(r.player)+'</a>'+
         '<span class="team-badge" style="color:'+tc+';background:'+bg+'">'+r.teamAbbr+'</span>'+
       '</td>'+
       '<td class="col-mtt" style="color:var(--blue-light)">'+n(r.mtt)+'</td>'+
@@ -1282,7 +1282,7 @@ function renderLeaders(){
   cards.forEach(function(card){
     var rows=s[card.key]||[];if(!rows.length)return;
     var minNote=card.min?'(min '+card.min+' games)':'';
-    var rowsHtml=rows.map(function(p){var rc=p.rank<=3?'sc-r'+p.rank:'';var pIcon=playerIcon(p.team);return '<tr class="sc-row '+rc+'"><td class="sc-rk">'+(p.rank<=3?rLbl(p.rank):p.rank)+'</td><td class="sc-name">'+pIcon+'<a href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(p.player)+'" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color=\'var(--gold-light)\'" onmouseout="this.style.color=\'\'">'+esc(p.player)+'</a></td><td class="sc-val">'+card.valFn(p)+(card.subFn?'<span class="sc-sub-val">'+card.subFn(p)+'</span>':'')+'</td></tr>';}).join('');
+    var rowsHtml=rows.map(function(p){var rc=p.rank<=3?'sc-r'+p.rank:'';var pIcon=playerIcon(p.team);return '<tr class="sc-row '+rc+'"><td class="sc-rk">'+(p.rank<=3?rLbl(p.rank):p.rank)+'</td><td class="sc-name">'+pIcon+'<a href="https://www.casino.org/replaypoker/profile/'+encodeURIComponent(p.player)+'" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color=\'var(--gold-light)\'" onmouseout="this.style.color=\'inherit\'">'+esc(p.player)+'</a></td><td class="sc-val">'+card.valFn(p)+(card.subFn?'<span class="sc-sub-val">'+card.subFn(p)+'</span>':'')+'</td></tr>';}).join('');
     grid.innerHTML+='<div class="stat-card"><div class="sc-head"><span class="sc-icon">'+card.icon+'</span><span class="sc-title">'+card.title+'</span><span class="sc-min">'+minNote+'</span></div><div class="sc-body"><table class="sc-tbl"><tbody>'+rowsHtml+'</tbody></table></div></div>';
   });
   if(!grid.innerHTML)grid.innerHTML='<div class="empty-msg">No stats available for this period.</div>';
