@@ -1165,9 +1165,11 @@ function renderPlayersTable(){
   rows=rows.sort(function(a,b){
     var va,vb;
     if(pSortCol==='wins'){
-      /* Use mode-specific wins so sort matches the displayed value */
       va=activeEtype==='mtt'?(a.mtt_wins||0):activeEtype==='cutt'?(a.cutt_wins||0):(a.wins||0);
       vb=activeEtype==='mtt'?(b.mtt_wins||0):activeEtype==='cutt'?(b.cutt_wins||0):(b.wins||0);
+    } else if(pSortCol==='chips'){
+      va=activeEtype==='mtt'?(a.mtt_chips||0):activeEtype==='cutt'?(a.cutt_chips||0):(a.chips||0);
+      vb=activeEtype==='mtt'?(b.mtt_chips||0):activeEtype==='cutt'?(b.cutt_chips||0):(b.chips||0);
     } else if(pSortCol==='player'||pSortCol==='team'){
       va=(a[pSortCol]||'').toLowerCase();vb=(b[pSortCol]||'').toLowerCase();
     } else {
@@ -1213,6 +1215,8 @@ function renderPlayersTable(){
                   activeEtype==='cutt' ? (r.cutt_g !=null?r.cutt_g:r.games) : r.games;
     var gWon    = activeEtype==='mtt'  ? (r.mtt_wins  != null ? r.mtt_wins  : r.wins) :
                   activeEtype==='cutt' ? (r.cutt_wins != null ? r.cutt_wins : r.wins) : r.wins;
+    var gChips  = activeEtype==='mtt'  ? (r.mtt_chips != null ? r.mtt_chips : r.chips) :
+                  activeEtype==='cutt' ? (r.cutt_chips!= null ? r.cutt_chips: r.chips) : r.chips;
 
     return '<tr class="'+rc+'">'+
       '<td class="left rc">'+rl+'</td>'+
@@ -1225,7 +1229,7 @@ function renderPlayersTable(){
       '<td class="pts-total">'+n(totalVal)+'</td>'+
       '<td>'+n(gPlayed)+'</td>'+
       '<td>'+n(gWon)+'</td>'+
-      '<td>'+(r.chips>0?n(r.chips):'\u2014')+'</td>'+
+      '<td>'+(gChips>0?n(gChips):'\u2014')+'</td>'+
     '</tr>';
   }).join('');
 }
