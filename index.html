@@ -538,7 +538,7 @@
   color:var(--text-muted); text-transform:uppercase; text-align:center; max-width:200px; }
 .eb-award-winner { font-family:'Cinzel',serif; font-size:.75rem; font-weight:700;
   color:#d4c050; text-align:center; max-width:210px; word-break:break-word; }
-.eb-award-score { font-size:.7rem; color:var(--text-muted); text-align:center; }
+.eb-award-score { font-size:.72rem; color:#e0cc50; text-align:center; font-weight:600; }
 .eb-award-copy { background:transparent; border:1px solid rgba(200,160,30,.35); border-radius:20px;
   color:#c8b040; font-size:.62rem; font-family:'Cinzel',serif; letter-spacing:.08em;
   padding:5px 16px; cursor:pointer; transition:all .2s; margin-top:2px; }
@@ -2138,9 +2138,7 @@ function _ebTrophySvg(award, quarterLabel, year, winner) {
     leaves+='<ellipse cx="'+lx+'" cy="'+ly+'" rx="4" ry="9.5" fill="'+col+'" opacity="'+op+'" transform="rotate('+rot+' '+lx+' '+ly+')"/>';
   }
 
-  // Winner text (truncate for plaque)
-  var winnerT = (winner||'').length>16 ? (winner||'').slice(0,15)+'…' : (winner||'');
-  var line2   = c.lines[1]||'';
+  var line2 = c.lines[1]||'';
 
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="240" height="240" style="display:block">' +
   '<defs>' +
@@ -2166,17 +2164,17 @@ function _ebTrophySvg(award, quarterLabel, year, winner) {
   '<rect x="134" y="153" width="12" height="27" fill="url(#tdk'+u+')"/>' +
   // Base
   '<rect x="112" y="180" width="56" height="9" rx="2" fill="url(#tdk'+u+')"/>' +
-  '<rect x="100" y="189" width="80" height="16" rx="3" fill="url(#tdk'+u+')"/>' +
-  // Plaque
-  '<rect x="114" y="193" width="52" height="8" rx="2" fill="url(#tplq'+u+')"/>' +
+  '<rect x="100" y="189" width="80" height="17" rx="3" fill="url(#tdk'+u+')"/>' +
+  // Plaque (full base width so long team names fit)
+  '<rect x="101" y="192" width="78" height="10" rx="2" fill="url(#tplq'+u+')"/>' +
   // Cup text
   '<text x="140" y="100" text-anchor="middle" font-size="8" font-style="italic" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">Early Bird</text>' +
   '<text x="140" y="111" text-anchor="middle" font-size="8" font-style="italic" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">Poker League</text>' +
   '<text x="140" y="126" text-anchor="middle" font-size="12" font-weight="bold" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">'+esc(c.lines[0])+'</text>' +
   (line2?'<text x="140" y="140" text-anchor="middle" font-size="11" font-weight="bold" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">'+esc(line2)+'</text>':'') +
   '<text x="140" y="151" text-anchor="middle" font-size="7.5" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">'+esc(qsh)+(year?' · '+esc(year):'')+'</text>' +
-  // Plaque text
-  '<text x="140" y="199" text-anchor="middle" font-size="6.5" font-weight="bold" fill="#2A1000" font-family="Georgia,\'Times New Roman\',serif">'+esc(winnerT)+'</text>' +
+  // Plaque text — textLength makes the name always span the full plaque (no truncation)
+  '<text x="140" y="199" text-anchor="middle" font-size="6.5" font-weight="bold" fill="#2A1000" font-family="Georgia,\'Times New Roman\',serif" textLength="72" lengthAdjust="spacingAndGlyphs">'+esc(winner||'')+'</text>' +
   '</svg>';
 }
 
@@ -2212,11 +2210,10 @@ function _ebMedalSvg(award, month, quarterLabel, winner, isTeam) {
     '<circle cx="130" cy="44" r="3.5" fill="url(#mgold'+u+')"/>' +
     '<circle cx="141" cy="49" r="3" fill="url(#mgold'+u+')"/>';
 
-  var aLine1 = isTeam ? 'TOP MONTHLY' : 'TOP MONTHLY';
-  var aLine2 = isTeam ? 'TEAM SCORE'  : 'PLAYER SCORE';
+  var aLine1 = 'TOP MONTHLY';
+  var aLine2 = isTeam ? 'TEAM SCORE' : 'PLAYER SCORE';
   var mUpper = (month||'').toUpperCase();
   var qsh    = _ebQShort(quarterLabel);
-  var winnerT= (winner||'').length>14?(winner||'').slice(0,13)+'…':(winner||'');
 
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" width="210" height="210" style="display:block">' +
   '<defs>' +
@@ -2239,7 +2236,7 @@ function _ebMedalSvg(award, month, quarterLabel, winner, isTeam) {
   '<text x="130" y="108" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif" letter-spacing="0.5">'+aLine1+'</text>' +
   '<text x="130" y="120" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif" letter-spacing="0.5">'+aLine2+'</text>' +
   // Winner in center
-  '<text x="130" y="143" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFD700" font-family="Georgia,\'Times New Roman\',serif">'+esc(winnerT)+'</text>' +
+  '<text x="130" y="143" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFD700" font-family="Georgia,\'Times New Roman\',serif" textLength="100" lengthAdjust="spacingAndGlyphs">'+esc(winner||'')+'</text>' +
   // Month + quarter
   '<text x="130" y="161" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif" letter-spacing="1">'+esc(mUpper)+'</text>' +
   '<text x="130" y="174" text-anchor="middle" font-size="7.5" fill="#B09820" font-family="Georgia,\'Times New Roman\',serif">'+esc(qsh)+'</text>' +
