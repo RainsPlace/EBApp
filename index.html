@@ -521,6 +521,29 @@
   .li-note { font-size:.88rem; color:var(--text-dim); font-style:italic; margin-top:8px; text-align:center; line-height:1.7; }
   @media(max-width:700px) { .li-week-grid { grid-template-columns:1fr; } }
 
+
+/* ══ CHAMPIONS TAB ══════════════════════════════════════════ */
+.eb-champ-wrap { padding:24px 16px 56px; max-width:1200px; margin:0 auto; }
+.eb-champ-loading, .eb-champ-error { text-align:center; padding:48px 16px; color:var(--text-muted); font-size:.9rem; }
+.eb-champ-error { color:#e04050; }
+.eb-champ-quarter { margin-bottom:52px; }
+.eb-champ-qhdr { font-family:'Cinzel',serif; font-size:.88rem; font-weight:700; letter-spacing:.28em;
+  color:#c8b450; text-transform:uppercase; text-align:center;
+  padding:18px 0 20px; border-bottom:1px solid rgba(200,160,30,.25); margin-bottom:28px; }
+.eb-champ-section-lbl { font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.22em;
+  color:var(--text-muted); text-transform:uppercase; text-align:center; margin:28px 0 18px; }
+.eb-champ-row { display:flex; flex-wrap:wrap; justify-content:center; gap:18px 24px; margin-bottom:8px; }
+.eb-award-cell { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.eb-award-label { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.12em;
+  color:var(--text-muted); text-transform:uppercase; text-align:center; max-width:200px; }
+.eb-award-winner { font-family:'Cinzel',serif; font-size:.75rem; font-weight:700;
+  color:#d4c050; text-align:center; max-width:210px; word-break:break-word; }
+.eb-award-score { font-size:.7rem; color:var(--text-muted); text-align:center; }
+.eb-award-copy { background:transparent; border:1px solid rgba(200,160,30,.35); border-radius:20px;
+  color:#c8b040; font-size:.62rem; font-family:'Cinzel',serif; letter-spacing:.08em;
+  padding:5px 16px; cursor:pointer; transition:all .2s; margin-top:2px; }
+.eb-award-copy:hover { background:rgba(200,160,30,.1); border-color:rgba(200,160,30,.65); color:#e8d060; }
+.eb-award-copy:disabled { opacity:.45; cursor:default; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -570,6 +593,8 @@
   <div class="nav-section-label">TEAM</div>
   <div class="nav-item" data-tab="members" onclick="switchTab('members')">👥 Members</div>
   <div class="nav-item nav-external" onclick="window.open('https://script.google.com/macros/s/AKfycbwyseXz3fBGATsMZjcgAdvpm3w_dPrOM9vOwIlkwyn-I1J05pIGablBnAaSnJU7B8RWEA/exec','_blank')">⚓ Captain's Hub ↗</div>
+  <div class="nav-section-label">HISTORY</div>
+  <div class="nav-item" data-tab="champions" onclick="switchTab('champions')">🏆 Champions</div>
   <div class="nav-section-label">INFO</div>
   <div class="nav-item" data-tab="leagueinfo" onclick="switchTab('leagueinfo')">🗺 Leagues Info</div>
 </nav>
@@ -892,6 +917,13 @@
 </div>
 </div><!-- end section-leagueinfo -->
 
+<!-- CHAMPIONS -->
+<div id="section-champions" style="display:none">
+  <div id="champions-content" class="eb-champ-wrap">
+    <div class="eb-champ-loading">Loading champions…</div>
+  </div>
+</div>
+
 </div><!-- end main-content -->
 </div><!-- end app-layout -->
 
@@ -963,8 +995,9 @@ function applyData(json, isBackground){
 
 function loadData(isRefresh){
   if(isRefresh){
-    try{localStorage.removeItem(EB_LS_KEY);localStorage.removeItem(EB_LS_STATS_KEY);}catch(e){}
+    try{localStorage.removeItem(EB_LS_KEY);localStorage.removeItem(EB_LS_STATS_KEY);localStorage.removeItem(EB_LS_AWARDS);localStorage.removeItem(EB_LS_AWARDS_GEN);}catch(e){}
     STATS={}; STATS_LOADED=false; STATS_LOADING=false;
+    AWARDS_DATA=null; awardsLoaded=false;
     var b=document.getElementById('hdrRefreshBtn');if(b){b.classList.add('spinning');b.disabled=true;}
     fetchFresh(false);
     return;
@@ -1013,7 +1046,7 @@ function switchTab(tab){
   document.querySelectorAll('.nav-item').forEach(function(el){
     el.classList.toggle('active', el.dataset.tab===tab);
   });
-  ['standings','players','leaders','latest','output','calendar','members','leagueinfo'].forEach(function(t){
+  ['standings','players','leaders','latest','output','calendar','members','leagueinfo','champions'].forEach(function(t){
     document.getElementById('section-'+t).style.display=t===tab?'':'none';
   });
   document.getElementById('ctrl-main').style.display=(tab==='standings'||tab==='players')?'':'none';
@@ -1025,6 +1058,7 @@ function switchTab(tab){
   if(tab==='output')renderOutputTab();
   if(tab==='calendar')renderCalTab();
   if(tab==='members')renderMembers();
+  if(tab==='champions'){ if(!awardsLoaded) loadAwards(); }
 }
 
 function buildPeriodBar(){
@@ -1971,6 +2005,271 @@ function captureTab(){
       console.error('captureTab error:',err);
       if(btn){btn.textContent='\u26A0 FAILED';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TO CLIPBOARD';btn.disabled=false;},2000);}
       alert('Copy failed: '+err.message+'\nTry a different browser or check clipboard permissions.');
+    });
+}
+
+/* ══ CHAMPIONS TAB ══════════════════════════════════════ */
+var AWARDS_DATA  = null;
+var awardsLoaded = false;
+var EB_LS_AWARDS     = 'eb_wa_awards_v1';
+var EB_LS_AWARDS_GEN = 'eb_wa_awards_gen_v1';
+var _ebSvgN = 0;
+function _ebUid() { return 'ebsvg' + (++_ebSvgN); }
+
+function loadAwards() {
+  try {
+    var raw = localStorage.getItem(EB_LS_AWARDS);
+    var gen = localStorage.getItem(EB_LS_AWARDS_GEN);
+    if (raw && gen) {
+      var parsed = JSON.parse(raw);
+      if (parsed && parsed.quarters) {
+        AWARDS_DATA  = parsed;
+        awardsLoaded = true;
+        renderAwards(parsed);
+        if ((Date.now() - parseInt(gen)) >= 30*60*1000) fetchAwardsFromServer(true);
+        return;
+      }
+    }
+  } catch(e) {}
+  document.getElementById('champions-content').innerHTML = '<div class="eb-champ-loading">Loading champions…</div>';
+  fetchAwardsFromServer(false);
+}
+
+function fetchAwardsFromServer(isBackground) {
+  fetch(WEBAPP_URL + '?get=awards&_=' + Date.now())
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(data){
+      if(data && data.error) throw new Error(data.error);
+      AWARDS_DATA  = data;
+      awardsLoaded = true;
+      try{localStorage.setItem(EB_LS_AWARDS,JSON.stringify(data));localStorage.setItem(EB_LS_AWARDS_GEN,String(Date.now()));}catch(e){}
+      renderAwards(data);
+    })
+    .catch(function(err){
+      if(!isBackground){
+        document.getElementById('champions-content').innerHTML='<div class="eb-champ-error">Could not load champions: '+esc(String(err.message||err))+'<br>Make sure the Awards sheet exists (Admin Tasks → Rebuild Sheets → Rebuild Awards Sheet).</div>';
+      }
+    });
+}
+
+function renderAwards(data) {
+  var el = document.getElementById('champions-content');
+  if(!data || !data.quarters || !data.quarters.length){
+    el.innerHTML='<div class="eb-champ-error">No champions data. Run Admin Tasks → Rebuild Sheets → Rebuild Awards Sheet first.</div>';
+    return;
+  }
+  var html = '';
+  data.quarters.forEach(function(q){
+    html += '<div class="eb-champ-quarter">';
+    html += '<div class="eb-champ-qhdr">' + esc(_ebQDisplay(q.title)) + '</div>';
+
+    if(q.quarterly && q.quarterly.length){
+      html += '<div class="eb-champ-section-lbl">Quarterly Awards</div>';
+      html += '<div class="eb-champ-row">';
+      q.quarterly.forEach(function(a){ html += _ebAwardCell(a, null, q); });
+      html += '</div>';
+    }
+
+    if(q.monthly && q.monthly.length){
+      html += '<div class="eb-champ-section-lbl">Monthly Awards</div>';
+      // Group into month pairs (team + player)
+      var months = {}; var monthOrder = [];
+      q.monthly.forEach(function(m){
+        if(!months[m.month]){months[m.month]={};monthOrder.push(m.month);}
+        months[m.month][m.award] = m;
+      });
+      monthOrder.forEach(function(mo){
+        html += '<div class="eb-champ-section-lbl" style="font-size:.58rem;margin:18px 0 10px;opacity:.7">' + esc(mo.toUpperCase()) + '</div>';
+        html += '<div class="eb-champ-row">';
+        Object.keys(months[mo]).forEach(function(awd){ html += _ebAwardCell(months[mo][awd], mo, q); });
+        html += '</div>';
+      });
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function _ebQDisplay(title) {
+  // "Quarter 3 2026" → "3rd Quarter 2026"
+  var m = (title||'').match(/^Quarter (\d+)\s+(\d{4})$/);
+  if(!m) return title;
+  var ord = ['','1st','2nd','3rd','4th'];
+  return (ord[parseInt(m[1])]||m[1]+' th') + ' Quarter ' + m[2];
+}
+
+function _ebQYear(qLabel) { var m=(qLabel||'').match(/(\d{4})$/); return m?m[1]:''; }
+function _ebQShort(qLabel){ return (qLabel||'').replace(/\s*\d{4}$/,'').trim(); }
+
+function _ebAwardCell(a, month, q) {
+  var uid  = _ebUid();
+  var isMonthly = !!month;
+  var svgHtml = isMonthly
+    ? _ebMedalSvg(a.award, month, a.quarter||'', a.winner||'', a.type==='Team')
+    : _ebTrophySvg(a.award, a.quarter||'', _ebQYear(a.quarter), a.winner||'');
+  var score = a.score ? Number(a.score).toLocaleString() + ' pts' : '';
+  return '<div class="eb-award-cell">' +
+    '<div id="'+uid+'" style="line-height:0">' + svgHtml + '</div>' +
+    '<div class="eb-award-winner">' + esc(a.winner||'—') + '</div>' +
+    (score ? '<div class="eb-award-score">'+esc(score)+'</div>' : '') +
+    '<button class="eb-award-copy" onclick="copyEbAward(this,\''+uid+'\')">📷 Copy</button>' +
+    '</div>';
+}
+
+// ── Trophy SVG (quarterly awards) ─────────────────────────────
+function _ebTrophySvg(award, quarterLabel, year, winner) {
+  var cfgs = {
+    'Team Champions':       {b1:'#5A0A18',b2:'#160005',tf:'#3A0008',lines:['TEAM','CHAMPIONS']},
+    'Top Match Point Score':{b1:'#0A3A18',b2:'#020D06',tf:'#032808',lines:['Top Match','Point Score']},
+    'Top MTT Player':       {b1:'#0A1845',b2:'#030613',tf:'#050830',lines:['Top MTT','Player']},
+    'Top Cutthroat Player': {b1:'#2E0845',b2:'#0A0318',tf:'#1A0430',lines:['Top Cutthroat','Player']}
+  };
+  var c   = cfgs[award] || cfgs['Top Match Point Score'];
+  var u   = _ebUid();
+  var qsh = _ebQShort(quarterLabel); // "3rd Quarter"
+
+  // Laurel leaves — 36 around r=114
+  var leaves = '';
+  for(var i=0;i<36;i++){
+    var a=(i/36)*Math.PI*2-Math.PI/2;
+    var lx=(140+114*Math.cos(a)).toFixed(1), ly=(140+114*Math.sin(a)).toFixed(1);
+    var rot=((a*180/Math.PI)+90).toFixed(1);
+    var alt=i%2; var col=alt?'#C08A0A':'#D4AF37'; var op=alt?'0.72':'0.88';
+    leaves+='<ellipse cx="'+lx+'" cy="'+ly+'" rx="4" ry="9.5" fill="'+col+'" opacity="'+op+'" transform="rotate('+rot+' '+lx+' '+ly+')"/>';
+  }
+
+  // Winner text (truncate for plaque)
+  var winnerT = (winner||'').length>16 ? (winner||'').slice(0,15)+'…' : (winner||'');
+  var line2   = c.lines[1]||'';
+
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="240" height="240" style="display:block">' +
+  '<defs>' +
+  '<radialGradient id="tbg'+u+'" cx="50%" cy="42%" r="58%"><stop offset="0%" stop-color="'+c.b1+'"/><stop offset="100%" stop-color="'+c.b2+'"/></radialGradient>' +
+  '<radialGradient id="tring'+u+'" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFE888"/><stop offset="45%" stop-color="#C8A008"/><stop offset="100%" stop-color="#7A5800"/></radialGradient>' +
+  '<linearGradient id="tgold'+u+'" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFF8B0"/><stop offset="22%" stop-color="#FFD700"/><stop offset="58%" stop-color="#C88208"/><stop offset="100%" stop-color="#7A5200"/></linearGradient>' +
+  '<linearGradient id="tdk'+u+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A87008"/><stop offset="100%" stop-color="#3A2000"/></linearGradient>' +
+  '<linearGradient id="tplq'+u+'" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#E8C838"/><stop offset="50%" stop-color="#C89010"/><stop offset="100%" stop-color="#E8C838"/></linearGradient>' +
+  '</defs>' +
+  '<circle cx="140" cy="140" r="138" fill="url(#tring'+u+')"/>' +
+  '<circle cx="140" cy="140" r="130" fill="url(#tbg'+u+')"/>' +
+  leaves +
+  '<circle cx="140" cy="140" r="91" fill="'+c.b2+'" opacity="0.32"/>' +
+  // Handles
+  '<path d="M101,92 C76,84 64,112 70,134 C76,154 92,157 101,155" fill="none" stroke="url(#tgold'+u+')" stroke-width="13" stroke-linecap="round"/>' +
+  '<path d="M179,92 C204,84 216,112 210,134 C204,154 188,157 179,155" fill="none" stroke="url(#tgold'+u+')" stroke-width="13" stroke-linecap="round"/>' +
+  // Cup body
+  '<path d="M98,153 C89,132 87,107 100,80 L180,80 C193,107 191,132 182,153 Z" fill="url(#tgold'+u+')"/>' +
+  // Cup shading (left dark, right highlight)
+  '<path d="M98,153 C89,132 87,107 100,80 L110,80 C97,107 99,132 108,153 Z" fill="'+c.b2+'" opacity="0.22"/>' +
+  '<path d="M170,80 L180,80 C193,107 191,132 182,153 L172,153 C181,132 183,107 170,80 Z" fill="#FFFFDD" opacity="0.10"/>' +
+  // Stem
+  '<rect x="134" y="153" width="12" height="27" fill="url(#tdk'+u+')"/>' +
+  // Base
+  '<rect x="112" y="180" width="56" height="9" rx="2" fill="url(#tdk'+u+')"/>' +
+  '<rect x="100" y="189" width="80" height="16" rx="3" fill="url(#tdk'+u+')"/>' +
+  // Plaque
+  '<rect x="114" y="193" width="52" height="8" rx="2" fill="url(#tplq'+u+')"/>' +
+  // Cup text
+  '<text x="140" y="100" text-anchor="middle" font-size="8" font-style="italic" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">Early Bird</text>' +
+  '<text x="140" y="111" text-anchor="middle" font-size="8" font-style="italic" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">Poker League</text>' +
+  '<text x="140" y="126" text-anchor="middle" font-size="12" font-weight="bold" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">'+esc(c.lines[0])+'</text>' +
+  (line2?'<text x="140" y="140" text-anchor="middle" font-size="11" font-weight="bold" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">'+esc(line2)+'</text>':'') +
+  '<text x="140" y="151" text-anchor="middle" font-size="7.5" fill="'+c.tf+'" font-family="Georgia,\'Times New Roman\',serif">'+esc(qsh)+(year?' · '+esc(year):'')+'</text>' +
+  // Plaque text
+  '<text x="140" y="199" text-anchor="middle" font-size="6.5" font-weight="bold" fill="#2A1000" font-family="Georgia,\'Times New Roman\',serif">'+esc(winnerT)+'</text>' +
+  '</svg>';
+}
+
+// ── Medal SVG (monthly awards) ─────────────────────────────────
+function _ebMedalSvg(award, month, quarterLabel, winner, isTeam) {
+  var bg1 = isTeam ? '#4A0816' : '#083A18';
+  var bg2 = isTeam ? '#140006' : '#020D06';
+  var u   = _ebUid();
+
+  // 16-point starburst (cx=130,cy=130, outer=126, inner=106)
+  var starPts = '';
+  for(var i=0;i<32;i++){
+    var a=(i*Math.PI/16)-Math.PI/2;
+    var r=(i%2===0)?126:106;
+    starPts+=(130+r*Math.cos(a)).toFixed(1)+','+(130+r*Math.sin(a)).toFixed(1)+' ';
+  }
+
+  // Inner laurel leaves — r=86, 28 leaves
+  var leaves='';
+  for(var i=0;i<28;i++){
+    var a=(i/28)*Math.PI*2-Math.PI/2;
+    var lx=(130+86*Math.cos(a)).toFixed(1), ly=(130+86*Math.sin(a)).toFixed(1);
+    var rot=((a*180/Math.PI)+90).toFixed(1);
+    var alt=i%2; var col=alt?'#C0880A':'#D4AF37'; var op=alt?'0.68':'0.85';
+    leaves+='<ellipse cx="'+lx+'" cy="'+ly+'" rx="3.5" ry="7.5" fill="'+col+'" opacity="'+op+'" transform="rotate('+rot+' '+lx+' '+ly+')"/>';
+  }
+
+  // Crown (cx=130, base y≈70)
+  var crown=
+    '<path d="M113,70 L119,50 L127,62 L130,45 L133,62 L141,50 L147,70 Z" fill="url(#mgold'+u+')" stroke="'+bg2+'" stroke-width="0.4"/>' +
+    '<rect x="112" y="68" width="36" height="7" rx="2" fill="url(#mgold'+u+')"/>' +
+    '<circle cx="119" cy="49" r="3" fill="url(#mgold'+u+')"/>' +
+    '<circle cx="130" cy="44" r="3.5" fill="url(#mgold'+u+')"/>' +
+    '<circle cx="141" cy="49" r="3" fill="url(#mgold'+u+')"/>';
+
+  var aLine1 = isTeam ? 'TOP MONTHLY' : 'TOP MONTHLY';
+  var aLine2 = isTeam ? 'TEAM SCORE'  : 'PLAYER SCORE';
+  var mUpper = (month||'').toUpperCase();
+  var qsh    = _ebQShort(quarterLabel);
+  var winnerT= (winner||'').length>14?(winner||'').slice(0,13)+'…':(winner||'');
+
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" width="210" height="210" style="display:block">' +
+  '<defs>' +
+  '<radialGradient id="mbg'+u+'" cx="50%" cy="42%" r="58%"><stop offset="0%" stop-color="'+bg1+'"/><stop offset="100%" stop-color="'+bg2+'"/></radialGradient>' +
+  '<linearGradient id="mring'+u+'" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFF0A0"/><stop offset="38%" stop-color="#C8A008"/><stop offset="100%" stop-color="#FFF0A0"/></linearGradient>' +
+  '<linearGradient id="mgold'+u+'" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFF8B0"/><stop offset="28%" stop-color="#FFD700"/><stop offset="65%" stop-color="#C88208"/><stop offset="100%" stop-color="#7A5200"/></linearGradient>' +
+  '</defs>' +
+  // Gold starburst
+  '<polygon points="'+starPts+'" fill="url(#mring'+u+')"/>' +
+  // Inner dark circle
+  '<circle cx="130" cy="130" r="100" fill="url(#mbg'+u+')"/>' +
+  // Laurel leaves
+  leaves +
+  // Inner darker center
+  '<circle cx="130" cy="130" r="68" fill="'+bg2+'" opacity="0.32"/>' +
+  // Crown
+  crown +
+  // Text
+  '<text x="130" y="96" text-anchor="middle" font-size="7.5" font-style="italic" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif">Early Bird Poker League</text>' +
+  '<text x="130" y="108" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif" letter-spacing="0.5">'+aLine1+'</text>' +
+  '<text x="130" y="120" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif" letter-spacing="0.5">'+aLine2+'</text>' +
+  // Winner in center
+  '<text x="130" y="143" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFD700" font-family="Georgia,\'Times New Roman\',serif">'+esc(winnerT)+'</text>' +
+  // Month + quarter
+  '<text x="130" y="161" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#D4AF37" font-family="Georgia,\'Times New Roman\',serif" letter-spacing="1">'+esc(mUpper)+'</text>' +
+  '<text x="130" y="174" text-anchor="middle" font-size="7.5" fill="#B09820" font-family="Georgia,\'Times New Roman\',serif">'+esc(qsh)+'</text>' +
+  '<circle cx="130" cy="186" r="2.5" fill="#D4AF37" opacity="0.65"/>' +
+  '</svg>';
+}
+
+// ── Per-badge copy ─────────────────────────────────────────────
+function copyEbAward(btn, id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var orig = btn.textContent;
+  btn.textContent = '⏳ Copying…'; btn.disabled = true;
+  html2canvas(el, { backgroundColor: null, scale: 2, useCORS: true, logging: false })
+    .then(function(canvas){
+      return new Promise(function(res,rej){
+        canvas.toBlob(function(blob){
+          if(!blob){rej(new Error('toBlob failed'));return;}
+          navigator.clipboard.write([new ClipboardItem({'image/png':blob})]).then(res).catch(rej);
+        },'image/png');
+      });
+    })
+    .then(function(){
+      btn.textContent='✓ Copied!';
+      setTimeout(function(){btn.textContent=orig;btn.disabled=false;},2000);
+    })
+    .catch(function(err){
+      btn.textContent='⚠ Failed';
+      setTimeout(function(){btn.textContent=orig;btn.disabled=false;},2000);
+      console.error('copyEbAward:',err);
     });
 }
 
