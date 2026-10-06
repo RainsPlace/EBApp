@@ -2352,6 +2352,17 @@ function renderCalTab(){
 }
 
 loadData(false);
+
+(function(){
+  fetch(WEBAPP_URL + '?get=pageview')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var el = document.getElementById('ebPvCount');
+      if (el && d && d.count) el.textContent = Number(d.count).toLocaleString();
+    })
+    .catch(function(){});
+})();
 </script>
+<div id="eb-page-footer" style="text-align:center;padding:8px 0 12px;font-size:11px;color:#6aa84f;opacity:0.8">👁 PAGE VIEWS: <span id="ebPvCount">—</span></div>
 </body>
 </html>
