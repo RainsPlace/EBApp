@@ -83,10 +83,12 @@
   .period-btn.active { background:rgba(212,168,67,.12); border-color:var(--gold); color:var(--gold-light); }
 
   /* STANDINGS */
-  .panels-row { display:grid; grid-template-columns:1fr; gap:0; margin:20px 16px 40px; border:1px solid var(--border-gold); border-radius:8px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,.5); }
-  .panel { background:var(--bg-panel); display:flex; flex-direction:column; border-right:none; border-bottom:1px solid var(--border); min-width:0; }
-  .panel:last-child { border-bottom:none; }
+  .panels-row { display:grid; grid-template-columns:1fr; gap:16px; margin:20px auto 40px; max-width:760px; width:calc(100% - 32px); }
+  .panel { background:var(--bg-panel); display:flex; flex-direction:column; border:1px solid var(--border-gold); border-radius:8px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,.5); min-width:0; }
   .panel-header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px 11px; background:var(--bg-dark); border-bottom:2px solid var(--border-gold); flex-shrink:0; }
+  .panel-copy-btn { background:transparent; border:1px solid var(--border-gold); border-radius:4px; color:var(--gold-light); font-size:.72rem; font-family:'Cinzel',serif; font-weight:700; padding:3px 8px; cursor:pointer; letter-spacing:.05em; flex-shrink:0; }
+  .panel-copy-btn:hover { background:rgba(201,168,76,.12); }
+  .panel-copy-btn:disabled { opacity:.45; cursor:default; }
   .panel-title { font-family:'Cinzel',serif; font-size:.95rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
   .panel-mtt .panel-title { color:var(--accent-mtt); }
   .panel-cutt .panel-title { color:var(--accent-cutt); }
@@ -95,16 +97,12 @@
   .panel-mtt .panel-dot { background:var(--accent-mtt); }
   .panel-cutt .panel-dot { background:var(--accent-cutt); }
   .panel-all .panel-dot { background:var(--accent-all); }
-  .panel-podium { display:flex; align-items:flex-end; justify-content:center; gap:8px; padding:18px 12px 14px; background:linear-gradient(180deg,#0a0e06,var(--bg-panel)); border-bottom:1px solid var(--border); flex-shrink:0; }
-  .pp { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; min-width:0; }
-  .pp:nth-child(1){order:2}.pp:nth-child(2){order:1}.pp:nth-child(3){order:3}
-  .pp-badge { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-size:.68rem; font-weight:900; border:2px solid; flex-shrink:0; }
-  .pp:nth-child(1) .pp-badge { width:50px; height:50px; font-size:.78rem; }
-  .pp-name { font-family:'Cinzel',serif; font-size:.68rem; font-weight:700; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:100%; }
-  .pp-pts { font-size:.85rem; font-weight:600; color:var(--text-main); }
-  .pp:nth-child(1) .pp-pts { font-size:.98rem; }
+  .panel-podium { display:flex; align-items:flex-end; justify-content:center; gap:16px; padding:28px 32px 0; background:linear-gradient(180deg,#0a0e06,var(--bg-panel)); border-bottom:1px solid var(--border); flex-shrink:0; }
+  .pp { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:110px; max-width:150px; }
+  .pp-badge { width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-size:.78rem; font-weight:900; border:2px solid; flex-shrink:0; }
+  .pp-name { font-family:'Cinzel',serif; font-size:.72rem; font-weight:700; text-align:center; word-break:break-word; max-width:140px; line-height:1.3; margin-top:3px; }
+  .pp-pts { font-size:1.2rem; font-weight:700; font-variant-numeric:tabular-nums; }
   .pp-block { width:100%; border-radius:3px 3px 0 0; display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-size:.82rem; font-weight:900; }
-  .pp:nth-child(1) .pp-block{height:44px}.pp:nth-child(2) .pp-block{height:30px}.pp:nth-child(3) .pp-block{height:22px}
   .panel-table-wrap { overflow-x:auto; flex:1; }
   table { width:100%; border-collapse:collapse; font-size:.9rem; }
   thead tr { background:var(--bg-dark); }
@@ -286,8 +284,9 @@
   body.light select { background-color:#ECF2E8; color:#0D2B0D; border-color:#BF9A30; }
   body.light .period-bar { background:#FFFFFF; border-bottom-color:#C0D4B4; }
   body.light .period-btn.active { background:rgba(122,85,0,.10); border-color:#7A5500; }
-  body.light .panels-row { border-color:#BF9A30; box-shadow:0 4px 24px rgba(0,0,0,.07); }
-  body.light .panel { background:#FFFFFF; border-right-color:#C0D4B4; }
+  body.light .panels-row { box-shadow:none; }
+  body.light .panel { background:#FFFFFF; border-color:#BF9A30; box-shadow:0 4px 24px rgba(0,0,0,.07); }
+  body.light .panel-copy-btn { border-color:#BF9A30; color:#7A5500; }
   body.light .panel-header { background:#ECF2E8; border-bottom-color:#BF9A30; }
   body.light .panel-podium { background:linear-gradient(180deg,#DFF0D0 0%,#FFFFFF 100%); border-bottom-color:#C0D4B4; }
   body.light table { color:#0D2B0D; }
@@ -461,7 +460,7 @@
     .lg-right-stack > * { flex:1; min-width:280px; }
   }
   @media(max-width:700px) {
-    .panels-row { margin:10px 8px 30px; }
+    .panels-row { margin:10px 8px 30px; max-width:none; width:auto; gap:12px; }
     .lg-center-wrap { max-width:100vw; min-width:0; }
     .lg-main-grid { grid-template-columns:1fr; }
     .lg-left-2col { grid-template-columns:1fr; }
@@ -615,21 +614,21 @@
 <div id="section-standings">
   <div class="panels-row">
     <div class="panel panel-all">
-      <div class="panel-header"><span class="panel-title">&#11088; OVERALL &nbsp;Combined</span><span class="panel-dot"></span></div>
+      <div class="panel-header"><span class="panel-title">&#11088; OVERALL &nbsp;Combined</span><button class="panel-copy-btn" onclick="capturePanel(this.closest('.panel'),this)">&#128247; COPY</button></div>
       <div class="panel-podium" id="pod-all"></div>
       <div class="panel-table-wrap">
         <table id="tbl-all"><thead><tr><th class="r">Rk</th><th>Team</th><th class="r">MTT</th><th class="r">CUTT</th><th class="r">Total</th><th class="bar-cell"></th></tr></thead><tbody></tbody></table>
       </div>
     </div>
     <div class="panel panel-mtt">
-      <div class="panel-header"><span class="panel-title">&#9824; MTT &nbsp;Main Tournament</span><span class="panel-dot"></span></div>
+      <div class="panel-header"><span class="panel-title">&#9824; MTT &nbsp;Main Tournament</span><button class="panel-copy-btn" onclick="capturePanel(this.closest('.panel'),this)">&#128247; COPY</button></div>
       <div class="panel-podium" id="pod-mtt"></div>
       <div class="panel-table-wrap">
         <table id="tbl-mtt"><thead><tr><th class="r">Rk</th><th>Team</th><th class="r">Points</th><th class="bar-cell"></th></tr></thead><tbody></tbody></table>
       </div>
     </div>
     <div class="panel panel-cutt">
-      <div class="panel-header"><span class="panel-title">&#9876; CUTT &nbsp;Cutthroat</span><span class="panel-dot"></span></div>
+      <div class="panel-header"><span class="panel-title">&#9876; CUTT &nbsp;Cutthroat</span><button class="panel-copy-btn" onclick="capturePanel(this.closest('.panel'),this)">&#128247; COPY</button></div>
       <div class="panel-podium" id="pod-cutt"></div>
       <div class="panel-table-wrap">
         <table id="tbl-cutt"><thead><tr><th class="r">Rk</th><th>Team</th><th class="r">Points</th><th class="bar-cell"></th></tr></thead><tbody></tbody></table>
@@ -1110,10 +1109,10 @@ function buildTeamPodium(elId,teams){
   var el=document.getElementById(elId);
   if(!teams||!teams.length){el.innerHTML='<div class="empty-msg">No data</div>';return;}
 
-  /* Display order: 1st → 5th left to right */
-  var dispOrder=[0,1,2,3,4];
+  /* Display order: 4th, 2nd, 1st, 3rd, 5th — classic podium arrangement */
+  var dispOrder=[3,1,0,2,4];
   /* Block heights (px) by rank index (0=1st..4=5th) */
-  var blkH=[52,36,24,16,8];
+  var blkH=[110,76,52,34,18];
   var medals=['1st','2nd','3rd','4th','5th'];
 
   el.innerHTML=dispOrder.map(function(idx){
@@ -1121,7 +1120,7 @@ function buildTeamPodium(elId,teams){
     var clr=team.color||'#888';
     var meta=TEAM_META[team.team];
     var imgHtml=meta&&meta.avatar
-      ? '<img src="'+esc(meta.avatar)+'" style="width:'+(idx===0?'44':'36')+'px;height:'+(idx===0?'44':'36')+'px;border-radius:50%;object-fit:cover;border:2px solid '+esc(clr)+';box-shadow:0 0 8px '+esc(clr)+'88" alt="'+esc(team.team)+'" onerror="this.style.display=\'none\'">'
+      ? '<img src="'+esc(meta.avatar)+'" style="width:'+(idx===0?'82':idx<=2?'68':'55')+'px;height:'+(idx===0?'82':idx<=2?'68':'55')+'px;border-radius:50%;object-fit:cover;border:2px solid '+esc(clr)+';box-shadow:0 0 12px '+esc(clr)+'77" alt="'+esc(team.team)+'" onerror="this.style.display=\'none\'">'
       : '<div class="pp-badge" style="border-color:'+esc(clr)+';background:'+esc(clr)+'22;color:'+esc(clr)+'">'+(team.abbr||team.team.substring(0,4))+'</div>';
     return '<div class="pp">'+
       imgHtml+
@@ -2005,6 +2004,28 @@ function captureTab(){
       console.error('captureTab error:',err);
       if(btn){btn.textContent='\u26A0 FAILED';setTimeout(function(){btn.textContent='\uD83D\uDCF7 COPY TO CLIPBOARD';btn.disabled=false;},2000);}
       alert('Copy failed: '+err.message+'\nTry a different browser or check clipboard permissions.');
+    });
+}
+
+function capturePanel(panelEl, btn){
+  var isLight=document.body.classList.contains('light');
+  var bg=isLight?'#f5f8f2':'#010801';
+  if(btn){btn.textContent='⏳';btn.disabled=true;}
+  html2canvas(panelEl,{backgroundColor:bg,scale:2,useCORS:true,allowTaint:false,logging:false,imageTimeout:0})
+    .then(function(canvas){
+      return new Promise(function(resolve,reject){
+        canvas.toBlob(function(blob){
+          if(!blob)return reject(new Error('blob failed'));
+          navigator.clipboard.write([new ClipboardItem({'image/png':blob})]).then(resolve).catch(reject);
+        },'image/png');
+      });
+    })
+    .then(function(){
+      if(btn){btn.textContent='✓ COPIED';setTimeout(function(){btn.textContent='📷 COPY';btn.disabled=false;},2000);}
+    })
+    .catch(function(err){
+      if(btn){btn.textContent='⚠ FAILED';setTimeout(function(){btn.textContent='📷 COPY';btn.disabled=false;},2000);}
+      alert('Copy failed: '+err.message);
     });
 }
 
